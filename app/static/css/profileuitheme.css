@@ -1,0 +1,447 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+
+:root {
+  box-sizing: border-box;
+  
+}
+html{
+    font-size: clamp(1rem, 0.75rem + .5vw, 1rem);
+    
+} 
+*,
+*::before,
+*::after {
+box-sizing: inherit;
+margin: 0;
+padding: 0;
+}
+
+body{
+    background-color: hsl(203, 100%, 98%);
+    font-family: 'Questrial',sans-serif;
+   
+    -webkit-tap-highlight-color: transparent;
+    
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    
+   
+    overflow-x: hidden;
+    
+
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 72px 1fr 50px;
+    grid-template-areas:
+      'header'
+      'main'
+      'footer';
+    height: 100vh;
+}
+  
+.header {
+    grid-area: header;
+    border-bottom: 2px solid hsl(210, 23%, 95%);
+    box-shadow: 0 4px 6px hsla(0, 0%, 0%, .2);
+    background-color: hsl(0, 0%, 100%);
+  }
+  
+ 
+ 
+  .main {
+    grid-area: main;
+    background-color: hsl(210, 100%, 98%);
+  }
+  
+  .footer {
+    grid-area: footer;
+    
+  }
+
+  .header{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 16px;
+    
+  }
+  .header__items{
+    margin-left: 1.5rem;
+  }
+
+
+  .sidenav__list {
+    padding: 0;
+    /* margin-top: 85px; */
+    list-style-type: none;
+  }
+
+  .sidenav__list-item {
+    padding: 1.25rem ;
+    color: #ddd;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .sidenav__list-item:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+  }
+
+  .main-header {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    padding: 20px;
+    height: 150px; /* Force our height since we don't have actual content yet */
+    
+    color: slategray;
+  }
+  .name {
+    font-size: calc(1rem+1vw);
+    line-height: 1.125;
+    margin-bottom: 0.5rem;
+    color: hsl(210, 60%, 4%);
+    
+  }
+  .hr {
+  background-color: hsl(56, 96%, 51%);
+  border: none;
+
+
+  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
+
+  width: 5rem;
+
+  height: 2px;
+      
+      background-image: linear-gradient(90deg, hsl(56, 96%, 51%), transparent);
+      
+      border: 0;
+      
+      margin-left:  0;
+  }
+  .menu-icon {
+    position: fixed;
+    display: flex;
+    top:10px;
+    left: 10px;
+    align-items: center;
+    justify-content: center;
+    border-radius: .2em;
+    z-index: 1;
+    cursor: pointer;
+    padding: 12px;
+    border: 1px solid hsl(210, 23%, 95%);
+    color: hsl(0, 0%, 4%);
+    background-color: hsl(203, 100%, 98%);;
+  }
+  
+  /* Make room for the menu icon on mobile */
+  .header__search,.logout {
+
+   padding: 8px;
+   font-size: 18px;
+   border: 1px solid hsl(210, 23%, 95%);
+   
+   background-color: hsl(203, 100%, 98%);;
+   border-radius: .2em;
+  }
+  .header__search a ,.logout a{
+    text-decoration: none;
+    
+     color: hsl(0, 0%, 4%);
+     
+   }
+   .header__search a:hover,.logout a:hover {
+    
+    
+    color: #30c056;
+     
+   }
+   .header__solde{
+    padding: 8px 10px;
+    background: hsl(204, 97%, 38%);;
+    border-radius: .2em;
+    color: hsl(203, 100%, 98%);
+
+   }
+   .avatar__image{
+    
+    width: 40px;
+   }
+  
+  /* Mobile-first side nav styles */
+  .sidenav {
+    grid-area: sidenav;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 240px;
+    position: fixed;
+    overflow-y: auto;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    z-index: 2; /* Needs to sit above the hamburger menu icon */
+
+    background:hsl(0, 0%, 5%);
+    transform: translateX(-245px);
+    transition: all .6s ease-in-out;
+  }
+  
+  /* The active class is toggled on hamburger and close icon clicks */
+  .sidenav.active {
+    transform: translateX(0);
+  }
+  
+  /* Only visible on mobile screens */
+  .sidenav__close-icon {
+    position: absolute;
+    visibility: visible;
+    top: 8px;
+    right: 12px;
+    cursor: pointer;
+    font-size: 28px;
+    color: hsl(136, 60%, 47%);
+  }
+  .logo-app{
+    
+    
+    
+    padding-top:.25rem ;
+    padding-left: 1.25rem;
+
+  }
+  .main-header__updates{
+    display: flex;
+    padding: 1.25rem;
+    background: linear-gradient(89deg, rgb(21, 74, 189) 0.1%, rgb(26, 138, 211) 51.5%, rgb(72, 177, 234) 100.2%);
+    border-radius: 0.2em;
+    
+  }
+  .main__logo{
+    
+    border-radius: 0.2em;
+  }
+  .main__description p{
+    line-height: 1.5;
+    text-align: left;
+    justify-content: left;
+    margin-left: 2.5rem;
+    hyphens: auto;
+    color:white;
+    margin-bottom:1.25rem;
+  }
+  .main__description h2{
+    margin-left: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+
+  }
+  .main__description button{
+    margin-left: 2.5rem;
+    
+    
+    width: 35%;
+    border: none;
+  color: hsl(204, 97%, 38%);
+  background-color: white ;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.255;
+  font-weight: bold;
+  text-transform: uppercase;
+  
+  /* border: 1px solid black; */
+  justify-content: right;
+  border-radius: .2em;
+  border:1px solid white;
+
+  }
+  /* Non-mobile styles for side nav responsiveness, 750px breakpoint */
+  .modal {
+    display: flex;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    flex-direction: column;
+    /* justify-content: center; */
+    gap: 0.4rem;
+    width: 600px;
+    max-width: 100%;
+    height: 400px;
+    max-height: 100%;
+    padding: 1.3rem;
+    
+    position: absolute;
+    z-index: 1000;
+    
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: .2em;
+  }
+  .flex-1{
+    display:  flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .modal .flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .numbers{
+    display:  flex;
+    flex-wrap: wrap;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .select-currency{
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: baseline;
+  }
+  .select-currency span{
+    padding: .8rem;
+    border: none;
+    background: #30c056;
+    color: white;
+    border-radius: .2em;
+  }
+  .modal select {
+    padding: 0.7rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.2em;
+    font-size: 0.9em;
+    width: 250px;
+    width: 100%;
+  }
+  .modal select:focus{
+   outline: none;
+  }
+  
+ 
+  button {
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+  }
+  
+  .btn {
+    display: inline-block;
+    padding: 0.8rem 1.4rem;
+    font-weight: 700;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 1em;
+    width: 250px;
+  }
+  
+  .flex-1 .times{
+    margin-left: 1.25rem;
+    padding: .5rem 1.25rem;
+    border-radius: .2em;
+    background: hsl(0, 100%, 66%);
+    color: white;
+    border: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+  }
+  
+  
+  .numbers{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .play{
+    display: none;
+  }
+  .btn.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+  .numbers .numeric{
+    padding: 1rem;
+    text-decoration: none;
+    border: 1px solid black;
+    margin-bottom: .5rem;
+    border-radius: .2em;
+    font-size: 18px;
+    
+    background: #ddd;
+    border: none;
+  }
+  a{cursor: pointer;}
+  .numeric:active{
+    text-decoration: none;
+    background:hsl(204, 97%, 38%); 
+    color: white;
+    cursor: pointer;
+  }
+  .btn-close {
+    transform: translate(10px, -20px);
+    padding: 0.5rem 0.7rem;
+    background: #eee;
+    border-radius: 50%;
+  }
+  .overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    z-index: 1;
+  }
+  
+  .hidden {
+    display: none;
+  } 
+@media only screen and (min-width: 46.875em) {
+    /* Show the sidenav */
+    .grid-container {
+      grid-template-columns: 240px 1fr; /* Show the side nav for non-mobile screens */
+      grid-template-areas:
+        "sidenav header"
+        "sidenav main"
+        "sidenav footer";
+    }
+
+    .sidenav {
+      display: flex;
+      flex-direction: column;
+    }
+    .sidenav {
+        position: relative; /* Fixed position on mobile */
+        transform: translateX(0);
+      }
+    
+      .sidenav__close-icon {
+        visibility: hidden;
+    }
+  }
+
+  /* Medium-sized screen breakpoint (tablet, 1050px) */
+  @media only screen and (min-width: 65.625em) {
+    /* Break out main cards into two columns */
+   
+  }
+

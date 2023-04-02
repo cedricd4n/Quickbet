@@ -1,0 +1,233 @@
+
+
+
+
+.content{
+    
+    padding:0 .5rem;
+    /* background-color: blue; */
+    
+}
+.content-picture{
+    display: none;
+    overflow: hidden;
+}
+.name {
+    font-size: calc(1rem+1vw);
+    line-height: 1.125;
+    margin-bottom: 0.5rem;
+    color: hsl(210, 60%, 4%);
+    
+  }
+.hr {
+background-color: hsl(56, 96%, 51%);
+border: none;
+
+
+margin-bottom: 1.5rem;
+margin-top: 1.5rem;
+
+width: 5rem;
+
+height: 2px;
+    
+    background-image: linear-gradient(90deg, hsl(56, 96%, 51%), transparent);
+    
+    border: 0;
+    
+    margin-left:  0;
+}
+.description {
+    font-size: 17px;
+    line-height: 1.5;
+    text-align: left;
+    justify-content: left;
+    hyphens: auto;
+    color:hsla(210, 60%, 4%, 0.726) ;
+    margin-bottom: 32px;
+}
+
+.form-field {
+    margin-bottom: 16px;
+    width: 100%;
+   
+    display: flex;
+    flex-direction: column;
+}
+.col-name{
+    max-width: 400px;
+    width:100% ;
+    display: flex;
+    
+
+   
+
+}
+
+
+.flex-row-sm{
+    width:  45%;
+    max-width: 150px;
+    display: flex;
+    flex-direction: column;
+}
+.flex-row-lg{
+    width:55%;
+    max-width: 350px;
+    margin-left:auto;
+    display: flex;
+    flex-direction: column;
+}
+.form-field input:not([type=checkbox]):not([type=radio]):not([type=submit]){
+    display: block;
+    margin-top:15px;
+    margin-bottom:4px;
+    max-width: 400px;
+    width:100% ;
+    height: 40px;
+    font-size: calc(1rem+1vw);
+    line-height: 1.25;
+    
+    background-color: hsl(207, 17%, 90%);
+    border: 1px solid hsl(207, 17%, 90%);
+    border-radius: .2em;
+    color:  hsl(210, 60%, 4%);
+    font-weight: 400;
+}
+.flex-row> input:not([type=checkbox]):not([type=radio]):not([type=submit]){
+    margin-bottom: 0.6rem;
+    display: block;
+    margin-right: 10px;
+    font-size: calc(1rem+1vw);
+    line-height: 1.25;
+    height: 40px;
+    background-color: hsl(207, 17%, 90%);
+    border: 2px solid hsl(207, 17%, 90%);
+    border-radius: .2em;
+    color:  hsl(210, 60%, 4%);
+    font-weight: 400;
+}
+
+
+.col-name input:focus ,.form-field input:focus {
+    outline: none;
+}
+::placeholder{
+    
+    font-size: calc(1rem+1vw);
+    line-height: 1.25;
+    color:hsl(207, 28%, 30%);
+    
+}
+
+.button{
+    margin-top: 16px;
+    max-width:400px;
+    width: 100%;
+    border: none;
+  color: hsl(0, 65%, 97%);
+  background-color: hsl(136, 60%, 47%);
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.255;
+  font-weight: bold;
+  text-transform: uppercase;
+  
+  /* border: 1px solid black; */
+  justify-content: right;
+  border-radius: .2em;
+  border:1px solid hsl(136, 60%, 47%);
+  
+  
+  
+}
+.button:hover{
+    transform: scale(1.02) translateY(-4px);
+  
+  
+  
+}
+.button:active{
+    transform: scale(0.98) translateY(-2px);
+  
+  
+  
+}
+.coche {
+    width: 100%;
+    max-width: 400px;
+    display: block;
+    position: relative;
+    padding-left: 32px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    text-align: justify;
+    color:hsla(210, 60%, 4%, 0.726) ;
+}
+  
+/* Hide the default checkbox */
+input[type=checkbox] {
+    visibility: hidden;
+}
+  
+/* Creating a custom checkbox
+based on demand */
+.geekmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    border-radius: .2em;
+    background-color: hsl(207, 17%, 90%);
+    border: 1px solid hsl(207, 17%, 90%);;
+}
+  
+.coche input:checked ~ .geekmark {
+    background-color: hsl(204, 97%, 38%);
+}
+  
+/* Checkmark to be shown in checkbox */
+/* It is not be shown when not checked */
+.geekmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+  
+/* Display checkmark when checked */
+.coche input:checked ~ .geekmark:after {
+    display: block;
+}
+  
+/* Styling the checkmark using webkit */
+/* Rotated the rectangle by 45 degree and 
+showing only two border to make it look
+like a tickmark */
+.coche .geekmark:after {
+    left: 6px;
+    bottom: 4px;
+    width: 6px;
+    height: 12px;
+    border:1px solid white;
+    border-width: 0 4px 4px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.condition{
+
+    text-decoration: underline;
+    color: hsl(204, 97%, 38%);
+    font-size: 16px;
+
+}
+.col-name small ,.form-field small {
+    color: hsl(0, 100%, 66%);
+    font-size: 0.8rem;
+    float: left;
+    line-height: 1.75;
+    font-weight: normal;
+}

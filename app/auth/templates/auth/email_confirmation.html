@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Renitialise  ton mot de passe -QuickCash{% endblock %}
+{% block logsign %}
+<a href="{{ url_for('auth.login') }}" class="navbar-item secondary">Se connecter</a></li>
+
+{% endblock %}
+{% block content %}
+<div class="content-login">
+
+    <div class="centre-form-email">
+        <h1 class="name">
+          Entrer votre email quickcash
+        </h1>
+        <form action="/auth/passwordreset" class="password-form" method="POST">
+            {{ form.csrf_token }}
+            <div class="row-email form-field">
+                {% if form.email.errors %}
+                        <input id="email" class="input-error is-large" type="email" name="email" value=""  placeholder="Email" >
+                        {% for error in form.email.errors %}
+                            <small class="text-danger">{{ error }}</small>  
+                        {% endfor %}
+                    {% else %}
+                        <input id="email" class="input-success is-large" type="email" name="email" value=""  placeholder="Email" >
+                {% endif %}
+            </div>
+            
+            <div class="row-btn form-field">
+                <input type="submit" class="button" value="Envoyer" />
+                    
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 

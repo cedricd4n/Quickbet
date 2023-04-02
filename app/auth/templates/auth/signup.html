@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% block title %}Bienvenue -Chez QuickCash{% endblock %}
+
+{% block logsign %}
+    <a href="{{ url_for('auth.login') }}" class="navbar-item secondary">Se connecter</a></li>
+   
+{% endblock %}
+
+
+
+{% block content %}
+<div class="content has-main-centered">
+
+    <div class="content-picture content-item">
+
+    </div>
+    <div class="content-item content-form-desc">
+       <div class="content-desc">
+            <h1 class="name">
+                Inscription
+            </h1>
+            <hr class="hr">
+            <div class="description">
+                <p>
+                Participez et pariez  sur un numero <br>
+                pour gagner du cash.
+                
+                </p>
+            </div>
+       </div>
+       <div class="content-form">
+        
+        <form action="/auth/signup" method="post"  class="login-form" id="signup"  >
+            {{ form.csrf_token }}
+
+            <div class="row">
+
+                <div class="col-name">
+                    <div class="flex-row flex-row-sm">
+                        {% if form.name.errors %}
+                        <input  id="name" class="input-error input-name is-large" type="text" name="name"  placeholder="Nom" >
+                        {% for error in form.name.errors %}
+                            <small class="text-danger">{{ error }}</small>  
+                            {% endfor %}  
+                        {% else %}
+                            <input  id="name" class="input-success input-name is-large" type="text" name="name"  placeholder="Nom" >
+                        {% endif %}
+                    </div>
+                    <div class="flex-row flex-row-lg">
+                            {% if form.surname.errors %}
+                            <input  id="surname" class="input-error input-surname is-large" type="text" name="surname"  placeholder="Prenom" >
+                            {% for error in form.surname.errors %}
+                                <small class="text-danger">{{ error }}</small>  
+                                {% endfor %}
+                            {% else %}
+                                <input  id="surname" class="input-success input-surname is-large" type="text" name="surname"  placeholder="Prenom" >
+                            {% endif %}
+                    </div>
+                    
+                
+                </div>
+                
+                <div class="col-pseudo col-10 form-field">
+                    {% if form.pseudo.errors %}
+                        <input  id="pseudo" class="input-error is-large" type="text" name="pseudo"  placeholder="Pseudo" >
+                        {% for error in form.pseudo.errors %}
+                                
+                                <small class="text-danger {{ error }}">{{ error }}</small>  
+                        {% endfor %}
+                    {% else %}  
+                        <input  id="pseudo" class="input-success is-large" type="text" name="pseudo"  placeholder="Pseudo" >
+                    {% endif %}
+                </div>
+                <div class="col-email col-10 form-field">
+                    {% if form.email.errors %}
+                        <input id="email" class="input-error is-large" type="email" name="email" value=""  placeholder="Email" >
+                            {% for error in form.email.errors %}
+                                <small class="text-danger">{{ error }}</small>  
+                            {% endfor %}
+                    {% else %}
+                        <input id="email" class="input-success is-large" type="email" name="email" value=""  placeholder="Email" >
+                    {% endif %}
+                </div>
+                <div class="col-password col-10 form-field wrapper">
+                    {% if form.password.errors %}
+                        <input id="password" class="input-error pass is-large" type="password"  name="password" placeholder="Mot de Passe">
+                        <span class="show-btn"><i class="fas fa-eye"></i></span>
+                        {% for error in form.password.errors %}
+                                <small class="text-danger">{{ error }}</small>  
+                        {% endfor %}
+                    {% else %}
+                        <input id="password" class="input-success pass is-large" type="password"  name="password" placeholder="Mot de Passe">
+                        <span class="show-btn"><i class="fas fa-eye"></i></span>
+                    {% endif %}
+                </div>
+
+                <div class="col-phone col-10 form-field">
+                    {% if form.phone.errors %}
+                    <input id="phone" class="input-error is-large" type="tel" name="phone" placeholder="+225 057079375" />
+                        {% for error in form.phone.errors %}
+                                <small class="text-danger">{{ error }}</small>  
+                        {% endfor %}
+                    {% else %}
+                    <input id="phone" class="input-success is-large" type="tel" name="phone" placeholder="+225 057079375" />
+                    {% endif %}
+                </div>
+
+                <div class="col-date col-10 custom-date-field form-field">
+                    {% if form.date.errors %}
+                        <input  id="dateField" class="input-error is-large" type="text" name="date"  placeholder="Date de Naissance" >
+                        {% for error in form.date.errors %}
+                                <small class="text-danger">{{ error }}</small>  
+                        {% endfor %}
+                    {% else %}
+                        <input  id="dateField" class="input-success is-large" type="text" name="date"  placeholder="Date de Naissance" >
+                    {% endif %}
+                </div>
+
+                <div class="col-check col-10 form-field">
+                    {% if form.agree.errors %}
+                        <label class="coche">En donnant vos informations et en continuant, vous acceptez <a class="condition" href="{{ url_for('main.terms') }}">les Conditions générale d'utilisation</a>.
+                            <input   id="check" class="input-error" type="checkbox" name="agree">
+                            <span class="geekmark"></span>
+                        </label>
+                    {% else %}
+                        <label class="coche">En donnant vos informations et en continuant, vous acceptez <a class="condition" href="{{ url_for('main.terms') }}">les Conditions générale d'utilisation</a>.
+                            <input   id="check" class="input-error" type="checkbox" name="agree">
+                            <span class="geekmark"></span>
+                        </label>
+                    {% endif %}
+                    
+                </div>
+
+                <div class="col-btn col-md form-field">
+                    <input type="submit" class="button" value="Crée un compte" />
+                </div>
+                
+            </div>
+
+        </form>
+       </div>
+        
+    </div>
+    
+</div>
+<script>
+    var el = document.getElementById("dateField");
+
+    el.onkeyup = function(evt) {
+        if((evt.keyCode >= 48 && evt.keyCode <= 57) || (evt.keyCode >= 96 && 
+    evt.keyCode <= 105)) {
+        evt = evt || window.event;
+
+        var size = document.getElementById('dateField').value.length;
+
+        if ((size == 2 && document.getElementById('dateField').value > 31)|| (size == 5 && Number(document.getElementById('dateField').value.split('/')[1]) > 12) || (size >= 10 && Number(document.getElementById('dateField').value.split('/')[2]) > 2005)) {
+            alert('Date invalide');
+            document.getElementById('dateField').value = ''; 
+            return;
+        }
+
+        if ((size == 2 && document.getElementById('dateField').value < 32)|| (size == 5 && Number(document.getElementById('dateField').value.split('/')[1]) < 13)) {
+            document.getElementById('dateField').value += '/';        
+        } 
+
+        } else { 
+            
+            document.getElementById('dateField').value = '';
+        }
+}
+</script>
+{% endblock %}    

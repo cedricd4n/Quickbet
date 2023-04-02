@@ -1,0 +1,366 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{url_for('static', filename = 'css/profileuitheme.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/solid.css">
+   
+    <link rel="shortcut icon" href="{{url_for('static', filename = 'images/favicon.ico')}}" type="image/x-icon">
+    <title>Dashboard Profile -  QuickCash</title>
+</head>
+<body>
+{% if current_user.confirmed and  current_user.is_authenticated%}
+    <section class="modal hidden">
+        <div class="flex">
+            <img src="{{url_for('static', filename = 'images/huit.svg')}}" alt="logo du jeu" width="50px" height="50px">
+             <button class="btn-close">⨉</button>
+        </div>
+        <div>
+        <div class="flex-1">
+            <h3>Cash Rapide</h3>
+            <div class="times">
+                
+            </div>
+        </div>
+        <div class="numbers">
+
+        </div>
+        <div class="play">
+
+        </div>
+        <div class="select-currency">
+            <select id="monSelect" name="example">
+                {% for paid in paids %}
+                    <option value="{{ paid }}">{{ paid}}</option>
+                {% endfor %}
+            </select>
+            <span id="xof" class="currency">XOF</span>
+        </div>
+        
+        <button id="mybtn" class="btn disabled">Parier</button>
+    </section>
+    
+    <div class="overlay hidden"></div>
+  
+    <div class="grid-container">
+        <div class="menu-icon">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+        <header class="header">
+            <div class="header__search header__items">
+                <a  class="nav-link" href="{{ url_for('main.historique') }}">
+                    <i class="uis uis-history"></i>
+                </a>
+            </div>
+            <div class="logout header__items">
+                <a class="nav-link" href="{{ url_for('auth.logout') }}">
+                     
+                    <span class="uis uis-signout"></span>
+                </a> 
+                
+            </div>
+            <div class="header__solde header__items"><span>{{current_user.solde|e}} XOF</span></div>
+            <div class="header__avatar header__items">
+                <img class="avatar__image" id="image" alt="" >
+            </div>
+            
+        </header>
+        <aside class="sidenav">
+            <div class="sidenav__close-icon">
+                <i class="fa-solid fa-xmark"></i>
+            </div>
+            <ul class="sidenav__list">
+                <li class="logo-app">
+                    
+
+                    <img src="{{url_for('static', filename = 'images/quickcash.svg')}}" alt="" alt="logo quickcash" width="68px" height="68px">
+                </li>
+                <li class="sidenav__list-item"><span class="desc">Ticket n<sup>°</sup></span> <span class="valeur">not</span></li>
+                <li class="sidenav__list-item"><span class="desc">Numero du jeu</span> <span class="valeur">not</span></li>
+                <li class="sidenav__list-item"><span class="desc">Mise</span><span class="valeur">not</span></li>
+                <li class="sidenav__list-item"><span class="desc">Statut</span><span class="valeur">not</span></li>
+            </ul>
+        </aside>
+        <main class="main">
+            <div class="main-header">
+                <div class="main-header__heading"><h1 class="name">Nos jeux</h1><hr class="hr"></div>
+                <div class="main-header__updates">
+                    <div class="main-header__items main__logo">
+                        <img src="{{url_for('static', filename = 'images/huit.svg')}}" alt="logo du jeu" width="56px" height="56px">
+
+                    </div>
+                    <div class="main-header__items main__description">
+                        <h2 class="desc__name">Cash Rapide</h2>
+                        <p>Pariez sur un numéro  allant de 1 à huit <br> puis miser sur la somme que vous voulez pour gagnez encore plus avec QuickCash <br> Gangnez de l'argent rapidement. </p>
+                        <button class="btn-open">Jouer</button>
+                    </div>
+                   
+                </div>
+                
+                <div class="display">
+                        
+                
+                                {{current_user.pseudo|e}}
+                                <div id="log"></div>
+                        
+                                <div id="numbers">
+
+                                </div>
+        
+        
+                        
+               </div>
+            </div>
+           
+           
+        </main>
+        <footer class="footer">
+            <!-- <div class="footer__copyright">&copy; 2018 MTH</div>
+            <div class="footer__signature">Made with love by pure genius</div> -->
+        </footer>
+    </div>
+{% endif %}    
+    <script src="{{url_for('static', filename = 'js/Jquery-min.js')}}"></script>
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+        var socket;
+        
+        var temps_received = [];
+        $(document).ready(function(){
+            $("#mybtn").prop("disabled", true); 
+            socket = io.connect('http://' + document.domain + ':' + location.port + '/profile');
+
+            socket.on('connect', function() {
+                socket.emit('my event', {data: 'I\'m connected!'});
+                let image=document.getElementById('image')
+                fetch('https://ui-avatars.com/api/name={{current_user.pseudo}}&background=random&rounded=true')
+                .then((response) => {
+                    
+                    return response.blob();
+
+                })
+                .then((data)=> {
+
+                    
+                    image.src=URL.createObjectURL(data)
+                })
+                .catch(function(error) {
+                    console.log(error);
+                }); 
+            });
+            socket.on('my response', function(res) {
+            $('#log').append('<br>' + $('<div/>').text('Received #' + res.count + ': ' + res.data).html());
+            });
+            socket.on('game', function(res) {
+                if (temps_received.length >= 1){
+                    temps_received.shift()
+                }            
+                temps_received.push(res.count);
+                temps_string = '';
+                for (var i = 0; i < temps_received.length; i++){
+                    temps_string = temps_string +'<i class="uis uis-clock"></i>'+'<span class="time">'+res.times+'</span>';
+                }
+                $('.times').html(temps_string);
+                //$('#numbers').append('<br>' + $('<div/>').text('Received #' + res.serie+ ': ' + res.status + 'temps:'+res.times+'mises:'+res.mise).html());
+
+                temps_string1='';
+                for(var i=0; i<res.serie.length;i++){
+                    temps_string1 =temps_string1 + '<a class="numeric" data-name='+res.serie[i]+' >' + res.serie[i].toString() + '</a>';
+                    
+                }$(".numbers").html(temps_string1);
+
+                $(".numeric").on("click",function(event){
+
+                    event.preventDefault();
+                    clicke=$(this).attr("data-name");
+                    console.log(clicke);
+                    s=res.count
+                    sessionStorage.setItem("tmp",s)
+                    $(".numbers").hide();
+                    $(".play").show();
+                    var $infoDiv=$("<div>",{
+                        html:"<p>Numero Parier</p>"+'<span class="valeur">'+clicke+'</span>' +'<a class="cancel">'+"annuler"+ '</a>'
+                    });
+
+                    $(".play").html($infoDiv);
+                    $("#mybtn").removeClass("disabled");
+                    $("#mybtn").prop("disabled", false); 
+                    $(".cancel").on("click",function(event){
+                        $("#mybtn").addClass("disabled");
+                        $("#mybtn").prop("disabled", true); 
+                        $(".numbers").show();
+                        $(".play").hide();
+                    });
+                    $("#mybtn").click(function() {
+                        var valeur = $("#monSelect").val();
+                        console.log(typeof(clicke))
+                        
+                        console.log(typeof(valeur))
+                        room=clicke+valeur;
+                        console.log(room)
+                        sessionStorage.setItem("room",room);
+                        sessionStorage.setItem("room_second",clicke);
+                        
+                        socket.emit('client_response',{'idclient' : "{{numero_client|e}}", 'data_numero' : clicke,'data_mise':valeur,'tag':res.idgame})
+                    });
+
+                    
+
+
+
+                });
+                if (res.count==120){
+                       socket.emit('leave',{'room':sessionStorage.getItem("room"),'room_second':sessionStorage.getItem("room_second")});
+                               
+                       $(".numbers").show();
+                       $("#monSelect").show();
+                       $("#xof").show();
+                       $("#mybtn").show();    
+                       $("#mybtn").addClass("disabled");
+                        $("#mybtn").prop("disabled", true); 
+                        $(".play").hide();
+                            
+                            
+                }
+
+
+
+            });
+
+            socket.on('server_response', function(res) {
+                socket.emit('join',{'room':sessionStorage.getItem("room"),'room_second':sessionStorage.getItem("room_second")});
+                $(".numbers").hide();
+                $("#monSelect").hide();
+                $("#mybtn").hide();
+                console.log(res.data)
+                
+                $(".play").hide();
+                $("#xof").hide();
+                
+            });
+
+            socket.on('room_message', function(res){
+
+                console.log('welcome '+res)
+            });
+            socket.on('room_message1', function(res){
+
+                console.log('welcome '+res)
+            });
+
+        });
+        
+    </script>
+    <script>
+        
+        const hamburger = document.querySelector(".menu-icon");
+               
+        const navMenu = document.querySelector(".sidenav");
+        const sidenavCloseEl =document.querySelector('.sidenav__close-icon');
+        hamburger.addEventListener("click", mobileMenu);
+        function mobileMenu() {
+            hamburger.classList.toggle("active");
+           
+            navMenu.classList.toggle("active");
+        
+        }    
+        
+        sidenavCloseEl.addEventListener("click", closeMenu);
+        function closeMenu() {
+            hamburger.classList.remove("active");
+           
+            navMenu.classList.remove("active");
+            
+        }
+
+       
+
+
+        
+    </script>
+    <script>
+        
+        const modal = document.querySelector(".modal");
+        const overlay = document.querySelector(".overlay");
+        const openModalBtn = document.querySelector(".btn-open");
+        const closeModalBtn = document.querySelector(".btn-close");
+       
+        // close modal function
+        const closeModal = function () {
+        modal.classList.add("hidden");
+        overlay.classList.add("hidden");
+        };
+
+        // close the modal when the close button and overlay is clicked
+        closeModalBtn.addEventListener("click", closeModal);
+        overlay.addEventListener("click", closeModal);
+
+        // close modal when the Esc key is pressed
+        document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+            closeModal();
+        }
+        });
+
+        // open modal function
+        const openModal = function () {
+        modal.classList.remove("hidden");
+        overlay.classList.remove("hidden");
+        
+        };
+        // open modal event
+        openModalBtn.addEventListener("click", openModal);
+    </script>
+</body>
+</html>
+
+<!-- <html>
+    <head>
+        <title>Flask-SocketIO-Chat: {{ room }}</title>
+       
+        <script type="text/javascript" charset="utf-8">
+            var socket;
+            $(document).ready(function(){
+                socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
+                socket.on('connect', function() {
+                    socket.emit('joined', {});
+                });
+                socket.on('status', function(data) {
+                    $('#chat').val($('#chat').val() + '<' + data.msg + '>\n');
+                    $('#chat').scrollTop($('#chat')[0].scrollHeight);
+                });
+                socket.on('message', function(data) {
+                    $('#chat').val($('#chat').val() + data.msg + '\n');
+                    $('#chat').scrollTop($('#chat')[0].scrollHeight);
+                });
+                $('#text').keypress(function(e) {
+                    var code = e.keyCode || e.which;
+                    if (code == 13) {
+                        text = $('#text').val();
+                        $('#text').val('');
+                        socket.emit('text', {msg: text});
+                    }
+                });
+            });
+            function leave_room() {
+                socket.emit('left', {}, function() {
+                    socket.disconnect();
+
+                    // go back to the login page
+                    window.location.href = "{{ url_for('main.index') }}";
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Flask-SocketIO-Chat: {{ room }}</h1>
+        <textarea id="chat" cols="80" rows="20"></textarea><br><br>
+        <input id="text" size="80" placeholder="Enter your message here"><br><br>
+        <a href="#" onclick="leave_room();">Leave this room</a>
+    </body>
+</html> -->

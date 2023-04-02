@@ -1,0 +1,148 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+
+:root {
+  box-sizing: border-box;
+  
+}
+html{
+  font-size: clamp(1rem, 0.75rem + .5vw, 1rem);
+    
+} 
+*,
+*::before,
+*::after {
+box-sizing: inherit;
+margin: 0;
+padding: 0;
+}
+
+body{
+    background-color: hsl(203, 100%, 98%);
+    font-family: 'Questrial',sans-serif;
+   
+    -webkit-tap-highlight-color: transparent;
+    
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    
+   
+    overflow-x: hidden;
+    
+
+}
+
+
+.banner{
+  
+ 
+  
+  height: 32px;
+  background-color: hsl(204, 97%, 38%);
+  border: none;
+  margin-bottom: .5rem;
+
+}
+.banner-items{
+ display: flex;
+ justify-content: right;
+ border: none;
+ height: 100%;
+ padding-top: 0.25rem;
+ border:none;
+ align-items: baseline;
+ margin-right: 1.5rem;
+ list-style-type: none;
+
+}
+.banner-item{
+ color: hsl(203, 100%, 98%);
+ text-decoration: none;
+ 
+ font-size:.8rem
+}
+.last-banner-item{
+  margin: auto .5rem;
+}
+.page-header{
+  
+  display: flex;
+  align-items: center;
+}
+#logo{
+  margin-left: .15rem;
+   
+}
+#logo a{
+ font-size: calc(1rem+1vw);
+ color: hsl(210, 60%, 4%);
+ text-decoration: none;
+ font-weight: 400;
+  
+}
+#logsign{
+  margin-left: auto;
+  margin-right: 1.25rem;
+}
+#logsign a{
+  background-color:  hsl(203, 100%, 98%);
+  color: hsl(136, 60%, 47%);
+  cursor: pointer;
+  text-decoration: none;
+  
+  border-radius: 0.2em;
+  
+  border: 2px solid hsl(136, 50%, 60%);
+  padding: .75rem 1rem;
+  font-size: calc(1rem+1vw);
+  text-transform: capitalize;
+  
+  font-weight: bold;
+}
+#logsign a:hover {
+  color: hsl(203, 100%, 98%);
+  background-color: hsl(140, 100%, 1%);
+  border:none;
+  
+}
+main{
+  
+  margin:1.75rem .75rem auto;
+}
+
+.wrapper{
+  position: relative;
+  
+  width: 100%;
+  max-width: 400px;
+  /* border-radius: 5px;
+  box-shadow: 0px 3px 3px rgba(0,0,0,0.1); */
+  
+}
+
+.wrapper span{
+  position: absolute;
+  right: 15px;
+  top: 60%;
+  transform: translateY(-35%);
+  color: hsl(204, 50%, 50%);
+  cursor: pointer;
+  display: none;
+}
+.wrapper input:valid ~ span{
+  display: block;
+}
+.wrapper span i.hide-btn::before{
+  content: "\f070";
+}
+@media  screen and (min-width:48em) and (max-width:1023px) {
+
+  
+} 
+
+@media  screen and (min-width:64em)  {
+  
+ 
+  
+
+} 
