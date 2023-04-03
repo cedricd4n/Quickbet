@@ -133,7 +133,7 @@
         var temps_received = [];
         $(document).ready(function(){
             $("#mybtn").prop("disabled", true); 
-            socket = io.connect('http://' + document.domain + ':' + location.port + '/profile');
+            socket = io();
 
             socket.on('connect', function() {
                 socket.emit('my event', {data: 'I\'m connected!'});
