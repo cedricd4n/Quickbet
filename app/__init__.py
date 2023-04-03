@@ -19,7 +19,8 @@ migrate = Migrate()
 mail1=Mail()
 db = SQLAlchemy()
 basedir = os.path.abspath(os.path.dirname(__file__))
-def create_app(debug=False):
+
+def app(debug=False):
     from  app.models import User
     
     from flask_session import Session
