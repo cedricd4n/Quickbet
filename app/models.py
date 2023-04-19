@@ -34,6 +34,16 @@ class User(db.Model,UserMixin):
     backref='user',
     lazy='dynamic'
     )
+    game = db.relationship(
+    'Game',
+    backref='user',
+    lazy='dynamic'
+    )
+    tmpgame= db.relationship(
+    'TmpGame',
+    backref='user',
+    lazy='dynamic'
+    )
     
     def __init__(self,email,password,name,surname,pseudo,phone,date_n,condition,confirmed,admin,active,confirmed_on=None,solde=None):
 
@@ -90,4 +100,23 @@ class Game(db.Model):
         self.registered_on = datetime.datetime.now()
     
        
-       
+class TmpGame(db.Model):
+    
+    tmp_id=db.Column(db.Integer(),primary_key=True)
+    tmp_id_game=db.Column(db.String(1000))
+    tmp_mise=db.Column(db.Integer())
+    tmp_message=db.Column(db.Integer())
+    tmp_user_id = db.Column(db.Integer(),db.ForeignKey('user.id'))
+    tmp_statut=db.Column(db.Text())
+    registered_on = db.Column(db.DateTime, nullable=False)
+    
+    
+    def __init__(self,tmp_message,tmp_id_game,tmp_mise,tmp_user_id,tmp_statut):
+
+        self.tmp_message=tmp_message
+        self.tmp_id_game=tmp_id_game
+        self.tmp_mise=tmp_mise
+        self.tmp_user_id=tmp_user_id
+        self.tmp_statut=tmp_statut
+        self.registered_on = datetime.datetime.now()
+      

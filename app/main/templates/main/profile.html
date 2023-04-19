@@ -6,8 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{url_for('static', filename = 'css/profileuitheme.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename = 'css/game.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/solid.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
    
     <link rel="shortcut icon" href="{{url_for('static', filename = 'images/favicon.ico')}}" type="image/x-icon">
     <title>Dashboard Profile -  QuickCash</title>
@@ -51,43 +52,62 @@
             <i class="fa-solid fa-bars"></i>
         </div>
         <header class="header">
-            <div class="header__search header__items">
+            <div class="header__search hd">
                 <a  class="nav-link" href="{{ url_for('main.historique') }}">
-                    <i class="uis uis-history"></i>
+                    <span class="uil uil-bell" ></span>
                 </a>
             </div>
-            <div class="logout header__items">
+            <div class="profil-details header__items">
+                <div class="header__avatar ">
+                    <img class="avatar__image" id="image" alt="" >
+                </div>
+                <div class="detail-info">
+                    <span class=" dt-items joueur">{{current_user.pseudo|e}}  </span>
+                    <span class="dt-items solde-joueur">{{current_user.solde|e}} XOF</span>
+                </div>
+
+            </div>
+            <!-- <div class="logout header__items">
                 <a class="nav-link" href="{{ url_for('auth.logout') }}">
                      
                     <span class="uis uis-signout"></span>
                 </a> 
                 
-            </div>
-            <div class="header__solde header__items"><span>{{current_user.solde|e}} XOF</span></div>
-            <div class="header__avatar header__items">
-                <img class="avatar__image" id="image" alt="" >
-            </div>
+            </div> -->
+            <!-- <div class="header__solde header__items"><span>{{current_user.solde|e}} XOF</span></div> -->
+            
             
         </header>
         <aside class="sidenav">
-            <div class="sidenav__close-icon">
+            <div class="sidenav-item sidenav__close-icon">
                 <i class="fa-solid fa-xmark"></i>
             </div>
-            <ul class="sidenav__list">
-                <li class="logo-app">
-                    
 
-                    <img src="{{url_for('static', filename = 'images/quickcash.svg')}}" alt="" alt="logo quickcash" width="68px" height="68px">
-                </li>
-                <li class="sidenav__list-item"><span class="desc">Ticket n<sup>°</sup></span> <span class="valeur">not</span></li>
-                <li class="sidenav__list-item"><span class="desc">Numero du jeu</span> <span class="valeur">not</span></li>
-                <li class="sidenav__list-item"><span class="desc">Mise</span><span class="valeur">not</span></li>
-                <li class="sidenav__list-item"><span class="desc">Statut</span><span class="valeur">not</span></li>
-            </ul>
+            <div class="sidenav-item  logo-app">
+                <span class="logo-name">
+                    QuickCash
+                </span>
+            </div>
+            <div class="sidenav-item aside-item">
+                <ul class="sidenav__list">
+                    
+                    <li class="sidenav__list-item"><span class="desc">Detail Jeu en cour</span> <span class="valeur">not</span></li>
+                    <li class="sidenav__list-item"><span class="desc">Numero du jeu</span> <span class="valeur">not</span></li>
+                    <li class="sidenav__list-item"><span class="desc">Mise</span><span class="valeur">not</span></li>
+                    <li class="sidenav__list-item"><span class="desc">Statut</span><span class="valeur">not</span></li>
+                    
+                    
+                </ul>
+            </div>
+            <a class="nav-link logout-item sidenav-item " href="{{ url_for('auth.logout') }}">Deconnexion
+                        
+                        
+                        <span class="uil uil-signout"></span>
+            </a>
         </aside>
         <main class="main">
             <div class="main-header">
-                <div class="main-header__heading"><h1 class="name">Nos jeux</h1><hr class="hr"></div>
+                <!-- <div class="main-header__heading"><h1 class="name">Nos jeux</h1><hr class="hr"></div>
                 <div class="main-header__updates">
                     <div class="main-header__items main__logo">
                         <img src="{{url_for('static', filename = 'images/huit.svg')}}" alt="logo du jeu" width="56px" height="56px">
@@ -99,9 +119,9 @@
                         <button class="btn-open">Jouer</button>
                     </div>
                    
-                </div>
+                </div> -->
                 
-                <div class="display">
+                <!-- <div class="display">
                         
                 
                                 {{current_user.pseudo|e}}
@@ -113,7 +133,168 @@
         
         
                         
+               </div> -->
+
+               <div class="grid main_description">
+                        <div class="main-header__updates">
+                            <div class="main-header__items main__description">
+                                <div class="main-header__items main__description">
+                                    <h2 class="desc__name">Gagne 100 000 XOF avec Free prediction</h2>
+                                    <p>Pariez sur un numéro  allant de 1 à huit <br> puis miser sur la somme que vous voulez pour gagnez encore plus </p>
+                                </div>
+                                <button class="btn-open">Pas Disponible</button>
+                            </div>
+                        </div>         
                </div>
+               <div class="grid main_jeu">
+                    <div class="grid-item-header">
+                        <h3 class="grid-item-header-title">
+                            Cash Rapide
+                        </h3>
+                        <div class="grid-item-header-statut" id="statut">
+                            <span id="live">
+                                
+                                Live
+                            </span>
+                            <span id="play">
+                                
+                                Jeu validé
+                            </span>
+                            <span id="wait">
+                                
+                                Attendre
+                            </span>
+                        </div>
+                    </div>
+                    <div class="grid-item-main" id="app">
+                        <div class="display-header">
+                            <span class="display-header-item" id="titletimes">
+                              Temps restant
+                            </span>
+                            <span class="display-header-item" id="tag">
+                                
+                            </span>
+                            <span class="display-header-item" id="numbers">
+                               Numero à parier
+                            </span>
+                            
+                            <span class="display-header-item" id="set">
+                                
+                            </span>
+                            <span class="display-header-item" id="set-number">
+                               
+                            </span>
+                            <span class="display-header-item" id="possible-gain">
+                               
+                            </span>
+                        </div>
+                        <div class="display-body">
+                            <span id="times"></span>
+                            <div id="card-numbers">
+
+                            </div>
+                            <div id="card-set">
+
+                            </div>
+                            <span id="idgame">
+                                
+                            </span>
+                            <div id="valueset">
+                                
+                            </div>
+                            <span id="valuenums">
+                                
+                            </span>
+                            <div id="log">
+
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <div  id="card-item">
+                        <button id="btn-bet" class="primary-btn-bet">Parier</button>
+                        <button id="btn-cancel" class="primary-btn-cancel">Supprimer</button>
+                    </div>
+                        
+                    
+                </div>
+
+                
+                 
+               
+               <div class="grid main_quickpay">
+                    <div class="deposit-retrait">
+                        <div class="tabs">
+                            <div id="open" class="tab  tablinks" onclick="openTab(event, 'tab1')"> <p>Depôts</p></div>
+                            <div id="open" class="tab tablinks" onclick="openTab(event, 'tab2')"><p>Retraits</p></div>
+                        </div>
+                        <div id="tab1" class="boxcontent" >
+                           
+                            <div class="box-ct ct-depot">
+                                <form action="" method="post">
+                                    <div class="select-op">
+                                        <div class="op logo-orange">
+                                            <img src="{{url_for('static', filename = 'images/OrangeMoney.webp')}}" alt="Operateur Orange CI" width="48px" height="32px" >
+                                        </div>
+                                        <div class="op logo-mtn">
+                                            <img src="{{url_for('static', filename = 'images/moov-money.webp')}}" alt="Operateur Mtn CI" width="48px" height="32px" >
+                                        </div>
+                                        <div class="op logo-moov">
+                                            <img src="{{url_for('static', filename = 'images/mtn-money.webp')}}" alt="Operateur Moov Africa " width="56px" height="32px">
+                                        </div>
+                                    </div>
+                                    <div class="fields field-2 input-number">
+                                       
+                                        
+                                        <input type="text" class="num" id="cr_no" placeholder="Votre Numéro" minlength="19" maxlength="19">
+                                    </div>
+                                    <div class="fields field-3 input-montant">
+                                        
+                                        <input type="text" id="montant" placeholder="Entrez le montant">
+                                    </div>
+                                    <div class="field-3 field-btn input-montant">
+                                        
+                                        <input type="button" value="Envoyer">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    
+                        <div id="tab2" class="boxcontent">
+                           
+                            <div class="box-ct ct-depot">
+                                <form action="" method="post">
+                                    <div class="select-op">
+                                        <div class="op logo-orange">
+                                            <img src="{{url_for('static', filename = 'images/OrangeMoney.webp')}}" alt="Operateur Orange CI" width="48px" height="32px" >
+                                        </div>
+                                        <div class="op logo-mtn">
+                                            <img src="{{url_for('static', filename = 'images/moov-money.webp')}}" alt="Operateur Mtn CI" width="48px" height="32px">
+                                        </div>
+                                        <div class="op logo-moov">
+                                            <img src="{{url_for('static', filename = 'images/mtn-money.webp')}}" alt="Operateur Moov Africa" width="56px" height="32px">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="fields field-3 input-montant">
+                                        
+                                        <input type="text" id="montant" placeholder="Entrez le montant">
+                                    </div>
+                                    <div class=" field-3 field-btn input-montant">
+                                        
+                                        <input type="button" value="Envoyer">
+                                    </div>
+                                </form>
+                            </div> 
+                        </div>
+                            
+                    
+                    </div>
+                    
+               </div>
+
+               
             </div>
            
            
@@ -125,133 +306,227 @@
     </div>
 {% endif %}    
     <script src="{{url_for('static', filename = 'js/Jquery-min.js')}}"></script>
-   
+    <script src="{{url_for('static', filename = 'js/vue.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <!-- <script src="{{url_for('static', filename = 'js/index.js')}}"></script> -->
     <script type="text/javascript" charset="utf-8">
         var socket;
-        
+      
         var temps_received = [];
         $(document).ready(function(){
-            $("#mybtn").prop("disabled", true); 
-            socket = io();
+                $("#card-item").hide();
+                socket = io.connect('http://' + document.domain + ':' + location.port + '/profile');
+                $("#play").hide();
+                $("#wait").hide();
+                var gain_received = [];
+                socket.on('connect', function() {
+                   
+                   
+                    let image=document.getElementById('image')
+                    fetch('https://ui-avatars.com/api/?bold=true&?color=ffffff&name={{current_user.pseudo}}&background=random')
+                    .then((response) => {
+                        
+                        return response.blob();
 
-            socket.on('connect', function() {
-                socket.emit('my event', {data: 'I\'m connected!'});
-                let image=document.getElementById('image')
-                fetch('https://ui-avatars.com/api/name={{current_user.pseudo}}&background=random&rounded=true')
-                .then((response) => {
+                    })
+                    .then((data)=> {
+
+                        
+                        image.src=URL.createObjectURL(data)
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    }); 
+                });
+
+                
+                socket.on('responses_server', function(msg) {
                     
-                    return response.blob();
+                    $("#live").show();
+                    $("#wait").hide();
+                    if (temps_received.length >= 1){
+                        temps_received.shift()
+                    }            
+                    temps_received.push(msg.count);
+                    temps_string = '';
+                    for (var i = 0; i < temps_received.length; i++){
+                        temps_string = temps_string + msg.times;
+                    }
+                    $('#times').html(temps_string);
+                    temps_string1='';
+                    for(var i=0; i<msg.serie.length;i++){
+                        temps_string1 =temps_string1 + '<a @click="changeValue" class="numeric" data-name='+msg.serie[i]+' >' + msg.serie[i]+ '</a>';
+                        
+                    }$("#card-numbers").html(temps_string1);
 
-                })
-                .then((data)=> {
 
-                    
-                    image.src=URL.createObjectURL(data)
-                })
-                .catch(function(error) {
-                    console.log(error);
-                }); 
-            });
-            socket.on('my response', function(res) {
-            $('#log').append('<br>' + $('<div/>').text('Received #' + res.count + ': ' + res.data).html());
-            });
-            socket.on('game', function(res) {
-                if (temps_received.length >= 1){
-                    temps_received.shift()
-                }            
-                temps_received.push(res.count);
-                temps_string = '';
-                for (var i = 0; i < temps_received.length; i++){
-                    temps_string = temps_string +'<i class="uis uis-clock"></i>'+'<span class="time">'+res.times+'</span>';
-                }
-                $('.times').html(temps_string);
-                //$('#numbers').append('<br>' + $('<div/>').text('Received #' + res.serie+ ': ' + res.status + 'temps:'+res.times+'mises:'+res.mise).html());
+                    $(".numeric").on("click",function(event){
+                        event.preventDefault();
+                        clicke=parseInt($(this).attr("data-name"));
+                        console.log(clicke)
+                        sessionStorage.setItem("click",clicke);
+                       
+                        $("#card-numbers").hide();
 
-                temps_string1='';
-                for(var i=0; i<res.serie.length;i++){
-                    temps_string1 =temps_string1 + '<a class="numeric" data-name='+res.serie[i]+' >' + res.serie[i].toString() + '</a>';
-                    
-                }$(".numbers").html(temps_string1);
-
-                $(".numeric").on("click",function(event){
-
-                    event.preventDefault();
-                    clicke=$(this).attr("data-name");
-                    console.log(clicke);
-                    s=res.count
-                    sessionStorage.setItem("tmp",s)
-                    $(".numbers").hide();
-                    $(".play").show();
-                    var $infoDiv=$("<div>",{
-                        html:"<p>Numero Parier</p>"+'<span class="valeur">'+clicke+'</span>' +'<a class="cancel">'+"annuler"+ '</a>'
-                    });
-
-                    $(".play").html($infoDiv);
-                    $("#mybtn").removeClass("disabled");
-                    $("#mybtn").prop("disabled", false); 
-                    $(".cancel").on("click",function(event){
-                        $("#mybtn").addClass("disabled");
-                        $("#mybtn").prop("disabled", true); 
-                        $(".numbers").show();
-                        $(".play").hide();
-                    });
-                    $("#mybtn").click(function() {
-                        var valeur = $("#monSelect").val();
                         console.log(typeof(clicke))
-                        
-                        console.log(typeof(valeur))
-                        room=clicke+valeur;
-                        console.log(room)
-                        sessionStorage.setItem("room",room);
-                        sessionStorage.setItem("room_second",clicke);
-                        
-                        socket.emit('client_response',{'idclient' : "{{numero_client|e}}", 'data_numero' : clicke,'data_mise':valeur,'tag':res.idgame})
-                    });
+                        socket.emit('event_pay',{'username' : "{{name}}",'data':clicke,'tag_game':msg.idgame})
 
+                        $("#card-set").show()
+                        $("#numbers").text('');
+                        $("#set").text('Mises');
+                        
+                    })
+
+
+                    if (msg.count==0){
+
+                        $("#card-numbers").show();
+                        $("#card-set").hide();
+                        $("#numbers").text('Numéros à parier');
+                        $("#set").text('');
+                        $("#set-number").text('');
+                        $("#possible-gain").text('');
+
+                        $("#card-item").hide();
+
+                        $("#live").hide();
+                        $("#wait").show();
+                        $("#play").hide();
+                        $("#idgame").text('');
+                  
                     
+                        $("#valueset").text('');
+
+                        $("#valuenums").text('');
+                        socket.emit('delete_row',{'data' : "supression de ligne"})
+                    }
+                    
+                     if (msg.count==120){
+                         if (localStorage.getItem("room")==null || localStorage.getItem("secondroom")==null  ){
+                                 socket.emit('leave',{'room':55,'room_second':6000});
+                        
+                         }else{
+                            socket.emit('leave',{'room':localStorage.getItem("room"),'room_second':localStorage.getItem("secondroom")});
+                         }
+                       
+                         
 
 
+                    }
+                });
+
+                
+                socket.on('responses_server_first', function(msg) {
+                   
+                    console.log(msg.data)
+                    mises_string1='';
+                    for(var i=0; i<msg.data.length;i++){
+                        mises_string1 =mises_string1 + '<a class="mises" data-name='+msg.data[i]+' >' + msg.data[i] + '</a>';
+                        
+                    }$("#card-set").html(mises_string1);
+
+
+                    $(".mises").on("click",function(event){
+                        event.preventDefault();
+                        clicke=parseInt($(this).attr("data-name"));
+                        console.log(clicke)
+                        sessionStorage.setItem("click",clicke);
+                        
+                        $("#card-set").hide();
+                        localStorage.setItem("room",clicke);
+                        let room=clicke;
+                        let secondroom=msg.betnumber+clicke
+                        localStorage.setItem("secondroom",secondroom);
+
+                        socket.emit('join',{'room':room.toString(),'secondroom':secondroom.toString()});
+
+                        console.log(typeof(clicke))
+                        socket.emit('event_mise',{'username' : "{{name}}",'data':clicke,'bet_number':msg.betnumber,'idgame':msg.idgame,'statut':'live'})
+                     
+                        $("#set").text('Mise');
+                        $("#set-number").text('Numero parier');
+                        $("#possible-gain").text('Possible winning');
+                       
+                       
+                        $("#card-item").show();
+
+
+
+                        
+
+
+
+
+                    })
 
                 });
-                if (res.count==120){
-                       socket.emit('leave',{'room':sessionStorage.getItem("room"),'room_second':sessionStorage.getItem("room_second")});
-                               
-                       $(".numbers").show();
-                       $("#monSelect").show();
-                       $("#xof").show();
-                       $("#mybtn").show();    
-                       $("#mybtn").addClass("disabled");
-                        $("#mybtn").prop("disabled", true); 
-                        $(".play").hide();
-                            
-                            
-                }
+                socket.on('possible_gain', function(msg) {
+
+                       
+                    console.log(msg.players+'joueur')
+
+                    if (gain_received.length >= msg.player){
+                        
+                        gain_received.shift()
+                    }
+                    gain_received.push(msg.user_count);
+                    gain_string = '';
+                    for (var i = 0; i <gain_received.length; i++){
+                        gain_string = gain_string + '<span>XOF' +
+                        +gain_received[i].toString() + '</span>';
+                    }
+                    $('#log').html(gain_string);
+                })
+
+                socket.on('responses_server_second', function(msg) {
+                    $("#idgame").text(msg.idgame);
+                    $('#log').show();
+                    
+                   
+                    $("#valueset").text('XOF'+msg.data);
+
+                    $("#valuenums").text(msg.betnumber);
+
+
+                    $("#btn-bet").on("click",function(event){
+
+                        
+                       
+                        $("#live").hide();
+                        socket.emit('event_save',{'username' : "{{name}}",'data1':msg.data,'data2':msg.idgame,'data3':msg.betnumber}) 
 
 
 
-            });
+                    })
 
-            socket.on('server_response', function(res) {
-                socket.emit('join',{'room':sessionStorage.getItem("room"),'room_second':sessionStorage.getItem("room_second")});
-                $(".numbers").hide();
-                $("#monSelect").hide();
-                $("#mybtn").hide();
-                console.log(res.data)
+                })
+
+
+                socket.on('responses_server_third', function(msg) {
+                    $('#log').show();
+                    $("#play").show();
+                    $("#live").hide();
+                    $("#card-numbers").hide();
+                    $("#idgame").text(msg.idgame);
+                    console.log("salut")
+                    
+                    $("#valueset").text('XOF'+msg.data);
+
+                    $("#valuenums").text(msg.betnumber);
+
+                    $("#card-item").hide();
+                    $("#set").text('Mise');
+                    $("#set-number").text('Numero parier');
+                    $("#possible-gain").text('Possible winning');
+                       
+
+                })
+
+               
+               
+               
                 
-                $(".play").hide();
-                $("#xof").hide();
                 
-            });
-
-            socket.on('room_message', function(res){
-
-                console.log('welcome '+res)
-            });
-            socket.on('room_message1', function(res){
-
-                console.log('welcome '+res)
-            });
 
         });
         
@@ -316,51 +591,22 @@
         // open modal event
         openModalBtn.addEventListener("click", openModal);
     </script>
+    <script>
+         document.getElementById("tab1").classList.add("active");
+         document.getElementById("open").classList.add("active");
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("boxcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
 </body>
 </html>
-
-<!-- <html>
-    <head>
-        <title>Flask-SocketIO-Chat: {{ room }}</title>
-       
-        <script type="text/javascript" charset="utf-8">
-            var socket;
-            $(document).ready(function(){
-                socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
-                socket.on('connect', function() {
-                    socket.emit('joined', {});
-                });
-                socket.on('status', function(data) {
-                    $('#chat').val($('#chat').val() + '<' + data.msg + '>\n');
-                    $('#chat').scrollTop($('#chat')[0].scrollHeight);
-                });
-                socket.on('message', function(data) {
-                    $('#chat').val($('#chat').val() + data.msg + '\n');
-                    $('#chat').scrollTop($('#chat')[0].scrollHeight);
-                });
-                $('#text').keypress(function(e) {
-                    var code = e.keyCode || e.which;
-                    if (code == 13) {
-                        text = $('#text').val();
-                        $('#text').val('');
-                        socket.emit('text', {msg: text});
-                    }
-                });
-            });
-            function leave_room() {
-                socket.emit('left', {}, function() {
-                    socket.disconnect();
-
-                    // go back to the login page
-                    window.location.href = "{{ url_for('main.index') }}";
-                });
-            }
-        </script>
-    </head>
-    <body>
-        <h1>Flask-SocketIO-Chat: {{ room }}</h1>
-        <textarea id="chat" cols="80" rows="20"></textarea><br><br>
-        <input id="text" size="80" placeholder="Enter your message here"><br><br>
-        <a href="#" onclick="leave_room();">Leave this room</a>
-    </body>
-</html> -->

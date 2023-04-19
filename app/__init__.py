@@ -18,6 +18,7 @@ redis_store = FlaskRedis()
 migrate = Migrate()
 mail1=Mail()
 db = SQLAlchemy()
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 def app(debug=False):
@@ -27,7 +28,7 @@ def app(debug=False):
     app = Flask(__name__)
     app.debug = debug
     app.config['SECRET_KEY'] = '5accdb11b2c10a78d7c92c5fa102ea77fcd50c2058b00f6e'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///appdb.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///application.db'
     
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql:://admin:r00tmysql@database.ce6yjppkl8ml.us-east-1.rds.amazonaws.com:3306/database'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
