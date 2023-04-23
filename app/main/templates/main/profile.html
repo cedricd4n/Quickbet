@@ -581,6 +581,14 @@
                     $('#bet_game').text(msg.numero_parier)
                     $('#statut_game').text(msg.statut)
                 })
+
+                socket.on('detail_jeu', function(msg) {
+                    $('#number_game').text(msg.numero_jeu)
+                    $('#date_game').text(msg.formatted_data)
+                    $('#set_game').text(msg.mise_jeu)
+                    $('#bet_game').text(msg.numero_parier)
+                    $('#statut_game').text(msg.statut)
+                })
                
                
                                       
