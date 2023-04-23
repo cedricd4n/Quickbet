@@ -825,3 +825,24 @@ input[type=button]:active{
   }
 }
  
+.win{
+  display: inline-block;
+  position: relative;
+  padding: 8px 12px;
+  border-radius: 20px;
+  background-color: hsl(151, 100%, 30%);
+  color: hsl(144, 100%, 1%);;
+  font-size: 13px;
+  /* font-weight: bold; */
+}
+
+.lose{
+  display: inline-block;
+  position: relative;
+  padding: 8px 12px;
+  border-radius: 20px;
+  background-color: hsl(0, 100%, 43%);
+  color: hsl(144, 100%, 1%);;
+  font-size: 13px;
+  /* font-weight: bold; */
+}

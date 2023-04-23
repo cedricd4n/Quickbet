@@ -120,6 +120,7 @@
                    <div class="game-detail-item statut_jeu">
                     <span class="labels-item statut_jeu_item">Statut</span>
                     <span  id="statut_game">{{statut|e}}</span>
+                    
                    </div>
                 </div>
                 <div class="more-item">
@@ -582,12 +583,16 @@
                     $('#statut_game').text(msg.statut)
                 })
 
-                socket.on('detail_jeu', function(msg) {
-                    $('#number_game').text(msg.numero_jeu)
-                    $('#date_game').text(msg.formatted_data)
-                    $('#set_game').text(msg.mise_jeu)
-                    $('#bet_game').text(msg.numero_parier)
+                socket.on('server_resultat', function(msg) {
+                   if (msg.statut=='Gagné'){
+                    const element = document.getElementById("statut_game");
+                    element.classList.add("win");
                     $('#statut_game').text(msg.statut)
+                   }else{
+                    const element = document.getElementById("statut_game");
+                    element.classList.add("lose");
+                    $('#statut_game').text(msg.statut)
+                   }
                 })
                
                
