@@ -1,10 +1,10 @@
 from flask import Blueprint,render_template,flash,request,redirect,url_for,session,jsonify,abort
 from . import main
-from app.models import User,Compte_Quickcash
+from app.models import User,Compte_Quickcash,Game
 from app.forms import RegistrationForm
 from app.decorators import check_confirmed
 from  flask_login import login_required, login_user,logout_user,current_user
-
+from datetime import datetime
 
 def Paid():
     paid_tab=[]
@@ -50,7 +50,29 @@ def profile():
     compte_user=Compte_Quickcash.query.filter_by(user_id=user.id).first()
     numero_client=compte_user.num_compt
     paids=Paid()
-    return render_template('main/profile.html',paids=paids,numero_client=numero_client)
+    game=Game.query.order_by(Game.id.desc()).filter_by(user_id=user.id).first()
+    if game is not None:
+        
+        print(game)
+        numero_jeu=game.id_game
+        date_jeu=game.registered_on
+        dt=datetime.fromisoformat(str(date_jeu))
+        formatted_data=dt.strftime('%d/%m/%Y à %H:%M')
+        mise_jeu=game.paid
+        numero_parier=game.message
+        statut=game.statut
+    
+    else:
+        numero_jeu='pas information'
+        # date_jeu=game.registered_on
+        # dt=datetime.fromisoformat(str(date_jeu))
+        formatted_data='pas information'
+        mise_jeu='pas information'
+        numero_parier='pas information'
+        statut='pas information'
+        
+    
+    return render_template('main/profile.html',paids=paids,numero_client=numero_client,numero_jeu=numero_jeu,formatted_data=formatted_data,mise_jeu=mise_jeu,numero_parier=numero_parier,statut=statut)
 
 
 @main.route('/terms')

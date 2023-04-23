@@ -21,14 +21,14 @@ db = SQLAlchemy()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-def app(debug=False):
+def create_app(debug=False):
     from  app.models import User
     
     from flask_session import Session
     app = Flask(__name__)
     app.debug = debug
     app.config['SECRET_KEY'] = '5accdb11b2c10a78d7c92c5fa102ea77fcd50c2058b00f6e'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///application.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{basedir}/application.db"
     
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql:://admin:r00tmysql@database.ce6yjppkl8ml.us-east-1.rds.amazonaws.com:3306/database'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -46,6 +46,7 @@ def app(debug=False):
     db.init_app(app)
     mail1.init_app(app)
     redis_store.init_app(app)
+    migrate.init_app(app,db)
     login_manager= LoginManager()
 
     login_manager.login_view='auth.login'
@@ -56,15 +57,16 @@ def app(debug=False):
     def load_user(user_id):
         
         return User.query.get(int(user_id))
-    
-    migrate.init_app(app,db)
-    from .main import main
-    app.register_blueprint(main)
-    from .auth import auth
-    app.register_blueprint(auth)
-    from .mail import mails
-    app.register_blueprint(mails)
+    with app.app_context():
+        
+        
+        from .main import main
+        app.register_blueprint(main)
+        from .auth import auth
+        app.register_blueprint(auth)
+        from .mail import mails
+        app.register_blueprint(mails)
 
-    
-    return app
+        
+        return app
 

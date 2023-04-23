@@ -54,7 +54,7 @@
         <header class="header">
             <div class="header__search hd">
                 <a  class="nav-link" href="{{ url_for('main.historique') }}">
-                    <span class="uil uil-bell" ></span>
+                    <!-- <span class="online">En ligne</span> -->
                 </a>
             </div>
             <div class="profil-details header__items">
@@ -63,7 +63,15 @@
                 </div>
                 <div class="detail-info">
                     <span class=" dt-items joueur">{{current_user.pseudo|e}}  </span>
-                    <span class="dt-items solde-joueur">{{current_user.solde|e}} XOF</span>
+                    <span class=" dt-items identifiant">{{numero_client|e}}  </span>
+                    <span id="persist_solde" class="dt-items solde-joueur">{{current_user.solde|e}} XOF</span>
+                    <div class="detail_solde_timestamp">
+                        <span class="solde-joueur" id="timestamp_solde"></span>
+                        <span class="solde-joueur" id="currency">XOF</span>
+                    </div>
+                    
+                    
+                    
                 </div>
 
             </div>
@@ -85,11 +93,39 @@
 
             <div class="sidenav-item  logo-app">
                 <span class="logo-name">
-                    QuickCash
+                    <span class="st">Quick</span><span class="nd">Cash</span>
+
                 </span>
             </div>
             <div class="sidenav-item aside-item">
-                <ul class="sidenav__list">
+
+               
+                <div class="sidenav__list-item game-detail">
+                   <div class="game-detail-item numero_jeu" >
+                    <span class="labels-item numero_jeu_item">N<sup>°</sup>Jeu</span>
+                    <span  id="number_game">{{numero_jeu|e}}</span>
+                   </div>
+                   <div class="game-detail-item date_jeu" >
+                    <span class="labels-item date_jeu_item">Date</span>
+                    <span  id="date_game">{{formatted_data|e}}</span>
+                   </div>
+                   <div class="game-detail-item mise_jeu" >
+                    <span class="labels-item mise_jeu_item">Set</span>
+                    <span  id="set_game">{{mise_jeu|e}}</span>
+                   </div>
+                   <div class="game-detail-item bet_jeu" >
+                    <span class="labels-item bet_jeu_item">Bet </span>
+                    <span  id="bet_game">{{numero_parier|e}}</span>
+                   </div>
+                   <div class="game-detail-item statut_jeu">
+                    <span class="labels-item statut_jeu_item">Statut</span>
+                    <span  id="statut_game">{{statut|e}}</span>
+                   </div>
+                </div>
+                <div class="more-item">
+                    <a href="#">Historiques</a>
+                </div>
+                <!-- <ul class="sidenav__list">
                     
                     <li class="sidenav__list-item"><span class="desc">Detail Jeu en cour</span> <span class="valeur">not</span></li>
                     <li class="sidenav__list-item"><span class="desc">Numero du jeu</span> <span class="valeur">not</span></li>
@@ -97,7 +133,7 @@
                     <li class="sidenav__list-item"><span class="desc">Statut</span><span class="valeur">not</span></li>
                     
                     
-                </ul>
+                </ul> -->
             </div>
             <a class="nav-link logout-item sidenav-item " href="{{ url_for('auth.logout') }}">Deconnexion
                         
@@ -311,7 +347,8 @@
     <!-- <script src="{{url_for('static', filename = 'js/index.js')}}"></script> -->
     <script type="text/javascript" charset="utf-8">
         var socket;
-      
+        $('#timestamp_solde').hide()
+        $('#currency').hide()
         var temps_received = [];
         $(document).ready(function(){
                 $("#card-item").hide();
@@ -337,11 +374,15 @@
                     .catch(function(error) {
                         console.log(error);
                     }); 
+
+                    console.log()
                 });
 
                 
                 socket.on('responses_server', function(msg) {
-                    
+                   
+                        
+                    $("#numbers").show();
                     $("#live").show();
                     $("#wait").hide();
                     if (temps_received.length >= 1){
@@ -380,8 +421,9 @@
 
                     if (msg.count==0){
 
-                        $("#card-numbers").show();
+                        $("#card-numbers").hide();
                         $("#card-set").hide();
+                        $("#numbers").hide();
                         $("#numbers").text('Numéros à parier');
                         $("#set").text('');
                         $("#set-number").text('');
@@ -394,21 +436,23 @@
                         $("#play").hide();
                         $("#idgame").text('');
                   
-                    
+                        $('#log').hide();
                         $("#valueset").text('');
 
                         $("#valuenums").text('');
                         socket.emit('delete_row',{'data' : "supression de ligne"})
+
+                        socket.emit('users_results',{'data':msg.idgame,'dataset':localStorage.getItem("room"),'databet':localStorage.getItem("room72")})
                     }
                     
                      if (msg.count==120){
-                         if (localStorage.getItem("room")==null || localStorage.getItem("secondroom")==null  ){
-                                 socket.emit('leave',{'room':55,'room_second':6000});
+                         if (localStorage.getItem("room")==null || localStorage.getItem("secondroom")==null || localStorage.getItem("room72")==null ){
+                                 socket.emit('leave',{'room':55,'room_second':6000,'room72':72});
                         
                          }else{
-                            socket.emit('leave',{'room':localStorage.getItem("room"),'room_second':localStorage.getItem("secondroom")});
+                            socket.emit('leave',{'room':localStorage.getItem("room"),'room_second':localStorage.getItem("secondroom"),'room72':localStorage.getItem("room")});
                          }
-                       
+                         $("#card-numbers").show();
                          
 
 
@@ -433,12 +477,13 @@
                         sessionStorage.setItem("click",clicke);
                         
                         $("#card-set").hide();
+                        localStorage.setItem("room72",msg.betnumber);
                         localStorage.setItem("room",clicke);
                         let room=clicke;
                         let secondroom=msg.betnumber+clicke
                         localStorage.setItem("secondroom",secondroom);
 
-                        socket.emit('join',{'room':room.toString(),'secondroom':secondroom.toString()});
+                        socket.emit('join',{'room':room.toString(),'secondroom':secondroom.toString(),'room72':msg.betnumber.toString()});
 
                         console.log(typeof(clicke))
                         socket.emit('event_mise',{'username' : "{{name}}",'data':clicke,'bet_number':msg.betnumber,'idgame':msg.idgame,'statut':'live'})
@@ -462,8 +507,8 @@
                 });
                 socket.on('possible_gain', function(msg) {
 
-                       
-                    console.log(msg.players+'joueur')
+                    $('#log').show();
+                    console.log(msg.user_count)
 
                     if (gain_received.length >= msg.player){
                         
@@ -480,7 +525,7 @@
 
                 socket.on('responses_server_second', function(msg) {
                     $("#idgame").text(msg.idgame);
-                    $('#log').show();
+                   
                     
                    
                     $("#valueset").text('XOF'+msg.data);
@@ -503,7 +548,7 @@
 
 
                 socket.on('responses_server_third', function(msg) {
-                    $('#log').show();
+                    
                     $("#play").show();
                     $("#live").hide();
                     $("#card-numbers").hide();
@@ -522,9 +567,23 @@
 
                 })
 
+
+                socket.on('server_response_solde', function(msg) {
+                    $('#timestamp_solde').show()
+                    $('#currency').show()
+                    $('#persist_solde').hide()   
+                    $('#timestamp_solde').text(msg.data)
+                })
+                socket.on('detail_jeu', function(msg) {
+                    $('#number_game').text(msg.numero_jeu)
+                    $('#date_game').text(msg.formatted_data)
+                    $('#set_game').text(msg.mise_jeu)
+                    $('#bet_game').text(msg.numero_parier)
+                    $('#statut_game').text(msg.statut)
+                })
                
                
-               
+                                      
                 
                 
 
