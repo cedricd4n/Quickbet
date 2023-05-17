@@ -29,6 +29,11 @@ class ResetEmailForm(FlaskForm):
     
     email = EmailField('Email', validators=[DataRequired(message="L'email ne doit pas être vide"), Email(message="L'email est incorrecte")])
 
+class AdminLoginForm(FlaskForm):
+    
+    password = PasswordField('Password', validators=[DataRequired(message="Le mot de passe ne doit pas être vide"), Length(min=8, max=20, message="Le mot de passe doit comporter au moins huit caractères.")])
+
+
 
 class ResetPasswordForm(FlaskForm):
     

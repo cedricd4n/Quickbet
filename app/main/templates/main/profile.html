@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -120,7 +120,8 @@
                    <div class="game-detail-item statut_jeu">
                     <span class="labels-item statut_jeu_item">Statut</span>
                     <span  id="statut_game">{{statut|e}}</span>
-                    
+                    <span  class="win" id="statut_game_win"></span>
+                    <span class="lose" id="statut_game_lose"></span>
                    </div>
                 </div>
                 <div class="more-item">
@@ -205,53 +206,75 @@
                     </div>
                     <div class="grid-item-main" id="app">
                         <div class="display-header">
-                            <span class="display-header-item" id="titletimes">
-                              Temps restant
-                            </span>
-                            <span class="display-header-item" id="tag">
+                            <div class="elt">
+                                <span  id="titletimes">
+                                    Temps restant
+                                </span>
+                                <div id="times">
+
+                                </div>
+
+                            </div>
+                           
+                            <div class="elt">
+                                <span class="display-header-item" id="numbers">
+                                    Numero à parier
+                                </span>
+
+                                <div id="card-numbers">
+
+                                </div>
+
+                            </div>
+                            <div class="elt">
+
+                                <span class="display-header-item" id="set">
                                 
-                            </span>
-                            <span class="display-header-item" id="numbers">
-                               Numero à parier
-                            </span>
-                            
-                            <span class="display-header-item" id="set">
+                                </span>
+                                <div id="card-set">
+
+                                </div>
+                                <div id="valueset">
                                 
-                            </span>
-                            <span class="display-header-item" id="set-number">
+                                </div>
+
+                            </div>
+                            <div class="elt">
+                                <span class="display-header-item" id="set-number">
                                
-                            </span>
-                            <span class="display-header-item" id="possible-gain">
+                                </span>
+                                <span id="valuenums">
+                                
+                                </span>
+                            </div>
+                            <div class="elt">
+                                <span class="display-header-item" id="possible-gain">
                                
-                            </span>
-                        </div>
-                        <div class="display-body">
-                            <span id="times"></span>
-                            <div id="card-numbers">
+                                </span>
+                                <div id="log">
 
+                                </div>
                             </div>
-                            <div id="card-set">
-
-                            </div>
-                            <span id="idgame">
+                            <div class="elt">
+                                <span class="display-header-item" id="tag">
                                 
-                            </span>
-                            <div id="valueset">
+                                </span>
+                                <span id="idgame">
                                 
-                            </div>
-                            <span id="valuenums">
-                                
-                            </span>
-                            <div id="log">
-
+                                </span>
                             </div>
                             
+                            
+                            
+                            
+                            
                         </div>
+                        
                     </div>
                     
-                    <div  id="card-item">
+                    <div class="card-btn" id="card-item">
                         <button id="btn-bet" class="primary-btn-bet">Parier</button>
-                        <button id="btn-cancel" class="primary-btn-cancel">Supprimer</button>
+                       
                     </div>
                         
                     
@@ -350,6 +373,8 @@
         var socket;
         $('#timestamp_solde').hide()
         $('#currency').hide()
+        $('#statut_game_win').hide()
+        $('#statut_game_lose').hide()
         var temps_received = [];
         $(document).ready(function(){
                 $("#card-item").hide();
@@ -376,7 +401,7 @@
                         console.log(error);
                     }); 
 
-                    console.log()
+                    
                 });
 
                 
@@ -443,7 +468,7 @@
                         $("#valuenums").text('');
                         socket.emit('delete_row',{'data' : "supression de ligne"})
 
-                        socket.emit('users_results',{'data':msg.idgame,'dataset':localStorage.getItem("room"),'databet':localStorage.getItem("room72")})
+                        
                     }
                     
                      if (msg.count==120){
@@ -511,14 +536,14 @@
                     $('#log').show();
                     console.log(msg.user_count)
 
-                    if (gain_received.length >= msg.player){
+                    if (gain_received.length >= 1){
                         
                         gain_received.shift()
                     }
                     gain_received.push(msg.user_count);
                     gain_string = '';
                     for (var i = 0; i <gain_received.length; i++){
-                        gain_string = gain_string + '<span>XOF' +
+                        gain_string = gain_string + '<span>' +
                         +gain_received[i].toString() + '</span>';
                     }
                     $('#log').html(gain_string);
@@ -529,7 +554,7 @@
                    
                     
                    
-                    $("#valueset").text('XOF'+msg.data);
+                    $("#valueset").text(msg.data);
 
                     $("#valuenums").text(msg.betnumber);
 
@@ -549,14 +574,16 @@
 
 
                 socket.on('responses_server_third', function(msg) {
-                    
+                    $('#statut_game_win').hide()
+                    $('#statut_game').show()
+                    $('#statut_game_lose').hide()
                     $("#play").show();
                     $("#live").hide();
                     $("#card-numbers").hide();
                     $("#idgame").text(msg.idgame);
                     console.log("salut")
                     
-                    $("#valueset").text('XOF'+msg.data);
+                    $("#valueset").text(msg.data);
 
                     $("#valuenums").text(msg.betnumber);
 
@@ -583,17 +610,19 @@
                     $('#statut_game').text(msg.statut)
                 })
 
-                socket.on('server_resultat', function(msg) {
-                   if (msg.statut=='Gagné'){
-                    const element = document.getElementById("statut_game");
-                    element.classList.add("win");
-                    $('#statut_game').text(msg.statut)
-                   }else{
-                    const element = document.getElementById("statut_game");
-                    element.classList.add("lose");
-                    $('#statut_game').text(msg.statut)
-                   }
+                socket.on('server_resultat_win', function(msg) {
+                    $('#statut_game_win').show()
+                    $('#statut_game').hide()
+                    console.log(msg.statut)
+                    $('#statut_game_win').text(msg.statut)
                 })
+
+                socket.on('server_resultat_lose', function(msg) {
+                    console.log(msg.statut)
+                    $('#statut_game_lose').show()
+                    $('#statut_game').hide()
+                    $('#statut_game_lose').text(msg.statut)
+                 })
                
                
                                       

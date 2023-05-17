@@ -135,7 +135,7 @@ def login():
         
         if not user or not check_password_hash(user.password,password):
             
-           
+            
             flash("le nom d'utilisateur ou le mot de passe quickcash est incorrect",'danger')
         
             return redirect(url_for('auth.login'))

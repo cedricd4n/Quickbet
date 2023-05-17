@@ -66,7 +66,21 @@ class User(db.Model,UserMixin):
     def is_admin(self):
         return self.admin
 
-
+class UserAdmin(db.Model,UserMixin):
+    
+    id = db.Column(db.Integer(),primary_key=True)
+    password=db.Column(db.String(100))
+    admin = db.Column(db.Boolean, nullable=False, default=False)
+     
+    def __init__(self,password):
+        
+        self.password =password
+        self.admin =False
+        
+    def is_admin(self):
+        return self.admin    
+	
+    
 class Compte_Quickcash(db.Model):
     id = db.Column(db.Integer(),primary_key=True)
     num_compt=db.Column(db.String(1000))

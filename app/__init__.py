@@ -10,12 +10,19 @@ from flask_login import LoginManager
 # from flask_admin import helpers as admin_helpers
 # from flask_admin.contrib.sqla import ModelView
 from flask_security import current_user, Security, SQLAlchemyUserDatastore, UserMixin
+
 from flask_redis import FlaskRedis
 from flask_mail import Mail
+from flask_admin import helpers as admin_helpers
+from flask_admin.contrib.sqla import ModelView
+
+
+from flask_admin import Admin
 socketio = SocketIO()
 csrf = CSRFProtect()
 redis_store = FlaskRedis()
 migrate = Migrate()
+admin = Admin(name='Quickcash')
 mail1=Mail()
 db = SQLAlchemy()
 
@@ -40,11 +47,15 @@ def create_app(debug=False):
     app.config['MAIL_USE_TLS'] = True
     app.config['MAIL_USE_SSL'] = False
     app.config['REDIS_URL'] = 'redis://localhost:6379/0'
-    
+    app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
+    app.config['FLASK_ADMIN_TEMPLATE_MODE'] = 'bootstrap3'
+    app.config['FLASK_ADMIN_FLUID_LAYOUT'] = True
+    app.config['FLASK_ADMIN_BASE_TEMPLATE'] = 'admin/master.html'
     socketio.init_app(app,async_mode=None, logger=True, engineio_logger=True)
     csrf.init_app(app)
     db.init_app(app)
     mail1.init_app(app)
+    admin.init_app(app)
     redis_store.init_app(app)
     migrate.init_app(app,db)
     login_manager= LoginManager()
@@ -66,6 +77,8 @@ def create_app(debug=False):
         app.register_blueprint(auth)
         from .mail import mails
         app.register_blueprint(mails)
+        from .admin import admin_bp
+        app.register_blueprint(admin_bp)
 
         
         return app

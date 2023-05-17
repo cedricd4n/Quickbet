@@ -3,15 +3,17 @@
 
 
 .content{
-    
     padding:0 .5rem;
+    
     /* background-color: blue; */
     
 }
-.content-picture{
+img {
     display: none;
     overflow: hidden;
-}
+} 
+
+
 .name {
     font-size: calc(1rem+1vw);
     line-height: 1.125;
@@ -230,4 +232,53 @@ like a tickmark */
     float: left;
     line-height: 1.75;
     font-weight: normal;
+}
+
+@media (min-width: 48em) {
+/* 
+    main{
+        padding: 16px;
+        
+    } */
+
+    .content{
+        margin:  0 auto;
+        display: flex;
+        align-items: center;
+        
+        justify-content: center;
+    }
+    .content-picture{
+        
+        width: 760px;
+        height: auto;
+        overflow: hidden;
+        
+        
+        display: block;
+        
+        
+        
+
+    }
+    .content-form-desc{
+     margin-left: 72px;
+        
+    }
+   
+   
+    
+    /* .column>.box-picture{
+        
+        
+    } */
+    img {
+        display: block;
+    overflow: hidden;
+        margin: -256px 0 -60px 0;
+        height: auto;
+        box-shadow: 0 10px 20px hsla(207, 18%, 10%, 0.15),0 3px 6px hsla(207, 18%, 10%, 0.10);
+        
+    } 
+      
 }

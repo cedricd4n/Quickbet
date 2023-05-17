@@ -3,6 +3,7 @@ from flask_socketio import emit, join_room, leave_room
 from  flask_login import login_required, login_user,logout_user,current_user
 from .. import socketio,redis_store,db
 from sqlalchemy import or_,and_
+
 import random
 import datetime
 # from datetime import datetime
@@ -25,21 +26,140 @@ def Password():
 
     return password +'-'+shortuuid.ShortUUID().random(length=7)
 
-        
-        
-        
+ 
 def background_thread():
 
     count =120
     __var__= []
     __time__=""
-    
+    code_game=""
     while True:
+        
+        keys=[]
+        val=[]
+        k=[]
+        v=[]
+        salle=0
+        dictionary={}
+        payement=0
+        dictionary={}
+        payement=0
+        payement_admin=0
+        
+       
+        
+        from app.models import Game
+        from app.models import User
+        from app.models import Compte_Quickcash
+      
+        mises=[100,200,300,400,500,600,700,800,900,1000]
+        if code_game!="":
+            for paid in mises:
+               
+                        game_participe=Game.query.filter(and_(Game.id_game==code_game,Game.paid==paid)).count()
+                        print(game_participe)
+                        if  game_participe!=0:
+                            for i in range(1,9):
+                                result = Game.query.filter(and_(Game.message==i,Game.id_game==code_game,Game.paid==paid)).count()
+                                if result!=0 and result!=game_participe:
+                                        keys.append(str(i))
+                                        cnt=result
+                                        val.append(cnt)
+                                if  result!=0 and result==game_participe:
+                                        keys.append(str(i))
+                                        cnt=result
+                                        val.append(cnt)
+                            print(keys)
+                            print(val) 
+                            for key, value in zip(keys,val):
+
+                                dictionary[key]=value 
+                            z=len(val)
+                            print(z)
+                            if z!=1 and len(val) != 0:
+                                a=[]
+                            
+                                compt=min(val)  
+                                
+                                for k,v in dictionary.items():
+                                    if  compt==v:
+                                        a.append(int(k))
+                                        break
+                                
+                                compt=min(a)   
+                                
+                                print(len(a))
+                                print("bleu")
+                                print(str(compt))
+                                for i in keys:
+                                    
+                                    if str(compt)==i:
+                                        print("vous avez gagné le jeu",str(compt))
+                                        Game.query.filter(and_(Game.message==compt,Game.id_game==code_game,Game.paid==paid)).update({
+                                                    'statut': 'Gagné'
+                                                    })
+                                        db.session.commit()
+                                        results = Game.query.filter(and_(Game.message==compt,Game.id_game==code_game,Game.paid==paid)).all()
+                                        results_nbr = Game.query.filter(and_(Game.message==compt,Game.id_game==code_game,Game.paid==paid)).count()
+                                        payement=round(((paid*game_participe)/(results_nbr+1)))
+                                        #ajouter le paiement de l' admin
+                                        for results in results:
+                                            User.query.filter_by(id=results.user_id).update({
+                                                    'solde': (User.solde+payement)
+                                                    })
+                                            db.session.commit()
+                                        salle=compt+paid
+                                        
+                                        socketio.emit('server_resultat_win', {'statut':'Gagné'},room=str(salle), namespace='/profile')
+                                    else:
+                                        Game.query.filter(and_(Game.message==i,Game.id_game==code_game,Game.paid==paid)).update({
+                                                    'statut': 'Perdu'
+                                                })
+                                        db.session.commit()
+                                        
+                                        salle_lost=int(i)+paid
+                                        socketio.emit('server_resultat_lose', {'statut':str(compt)+' le numero gagnant (perdu)'}, room=str(salle_lost), namespace='/profile')
+                                        print("vous avez perdu le jeu",i,str(compt))
+                            elif z==1 and len(val) != 0:
+                                compt=random.randint(1,8)
+                                
+                                if compt!=int(keys[0]):
+                                    payement_admin=paid*game_participe
+                                    #ajouter paiement admin
+                                    Game.query.filter(and_(Game.message==int(keys[0]),Game.id_game==code_game,Game.paid==paid)).update({
+                                                    'statut': 'Perdu'
+                                                    })
+                                    db.session.commit()
+                                    
+                                    n=str(compt)+' est le numero gagnant (perdu)'
+                                    
+                                    salle=int(keys[0])+paid
+                                    print("vert")
+                                    # print(f,r,n)
+                                    socketio.emit('server_resultat_lose', {'statut':n},room=str(salle), namespace='/profile') 
+                                    
+                                else:
+                                    payement_admin=paid*game_participe
+                                    Game.query.filter(and_(Game.message==int(keys[0]),Game.id_game==code_game,Game.paid==paid)).update({
+                                                    'statut': 'Perdu'
+                                                    })
+                                    db.session.commit()
+                                    
+                                    r=int(keys[0])+1
+                                    salle=int(keys[0])+paid
+                                    print("rouge")
+                                    # print("vous avez perdu le jeu",r,keys[0])
+                                    socketio.emit('server_resultat_lose', {'statut':str(r)+' le numero gagnant (perdu)'}, room=str(salle), namespace='/profile')               
+                            keys=[]
+                            val=[]  
+                            dictionary={}
+                            compt=0
+                            salle=[]  
         socketio.emit('responses',
         {'data': 'Server generated event', 'count': '','times':__time__,'status':'jouer','serie':__var__},namespace='/profile')
         socketio.sleep(10)
         var= random.sample(range(1,9),8)
-        idgame=Password()
+        code_game=Password()
         while  count>=0:
             mins, secs = divmod(count, 60)
             min_sec_format = '{:02d}:{:02d}'.format(mins, secs)
@@ -50,11 +170,15 @@ def background_thread():
                 min_sec_format = '{:02d}'.format((mins*60)+secs)
                 timeformat = '{:02d}s'.format((mins*60)+secs)
             socketio.emit('responses_server',
-            {'data': 'Server generated event', 'count':int(min_sec_format),'times':timeformat,'status':'jouer','serie':var,'idgame':idgame},namespace='/profile')
-            count -= 1 
+            {'data': 'Server generated event', 'count':int(min_sec_format),'times':timeformat,'status':'jouer','serie':var,'idgame':code_game},namespace='/profile')
             socketio.sleep(1)
-                
+            count -= 1      
         count =120
+        code_game=code_game   
+             
+        
+
+
 
 
 
@@ -70,10 +194,6 @@ def test_connect():
     join_room(id_room)
     
    
-    if thread is None:
-        thread = socketio.start_background_task(target=background_thread)   
-        
-        emit('my response', {'data': 'Connected', 'count': 0})
     
     if  Game.query.count()==0 or TmpGame.query.count()==0:
          emit("room_message", f"Welcome to, {current_user.name}", room=id_room) 
@@ -109,7 +229,7 @@ def test_connect():
                         possible_gain=round((display_hist.tmp_mise*tmp_participe)/(i+1))
                         socketio.emit('possible_gain', {'mise':display_hist.tmp_mise,'user_count':possible_gain,'player':nbr_gain,'players':tmp_participe},room=id_room,namespace='/profile')
             
-    
+        
 
 @socketio.on('event_pay', namespace='/profile')
 def generatedset(data):
@@ -261,120 +381,6 @@ def delete_row(load):
     
     db.session.commit()
 
-@socketio.on('users_results', namespace='/profile')
-def winning(load):
-    
-    keys=[]
-    val=[]
-    k=[]
-    v=[]
-    salle=0
-    dictionary={}
-    payement=0
-    payement_admin=0
-    code_game=load['data']
-    mise_game=int(load['dataset'])
-    print(type(mise_game))
-    bet_game=int(load['databet'])
-    from app.models import Game
-    from app.models import User
-    from app.models import Compte_Quickcash
-    game_participe=Game.query.filter(and_(Game.id_game==code_game,Game.paid==mise_game)).count()
-    print(game_participe)
-    if  game_participe!=0:
-        for i in range(1,9):
-            result = Game.query.filter(and_(Game.message==i,Game.id_game==code_game,Game.paid==mise_game)).count()
-            if result!=0 and result!=game_participe:
-                    keys.append(str(i))
-                    cnt=result
-                    val.append(cnt)
-            if  result!=0 and result==game_participe:
-                    keys.append(str(i))
-                    cnt=result
-                    val.append(cnt)
-        print(keys)
-        print(val) 
-        for key, value in zip(keys,val):
-
-            dictionary[key]=value 
-        z=len(val)
-        print(z)
-        if z!=1 and len(val) != 0:
-            a=[]
-        
-            compt=min(val)  
-            
-            for k,v in dictionary.items():
-                if  compt==v:
-                    a.append(int(k))
-                    break
-            
-            compt=min(a)   
-            
-            print(len(a))
-            print("bleu")
-            print(str(compt))
-            for i in keys:
-                
-                if str(compt)==i:
-                    print("vous avez gagné le jeu",str(compt))
-                    Game.query.filter(and_(Game.message==compt,Game.id_game==code_game,Game.paid==mise_game)).update({
-                                'statut': 'Gagné'
-                                })
-                    db.session.commit()
-                    results = Game.query.filter(and_(Game.message==compt,Game.id_game==code_game,Game.paid==mise_game)).all()
-                    results_nbr = Game.query.filter(and_(Game.message==compt,Game.id_game==code_game,Game.paid==mise_game)).count()
-                    payement=round(((mise_game*game_participe)/(results_nbr+1)))
-                    #ajouter le paiement de l' admin
-                    for results in results:
-                        User.query.filter_by(id=results.user_id).update({
-                                'solde': (User.solde+payement)
-                                })
-                        db.session.commit()
-                    salle=compt+mise_game
-                    
-                    socketio.emit('server_resultat', {'statut':'Gagné'},room=str(salle))
-                else:
-                    Game.query.filter(and_(Game.message==i,Game.id_game==code_game,Game.paid==mise_game)).update({
-                                'statut': 'Perdu'
-                            })
-                    db.session.commit()
-                    results_over = Game.query.filter(and_(Game.message==i,Game.id_game==code_game,Game.paid==mise_game)).all()
-                    salle=int(i)+mise_game
-                    socketio.emit('server_resultat', {'statut':str(compt)+' le numero gagnant (perdu)'}, room=str(salle))
-                    print("vous avez perdu le jeu",i,str(compt))
-        elif z==1 and len(val) != 0:
-            compt=random.randint(1,8)
-            
-            if compt!=int(keys[0]):
-                payement_admin=mise_game*game_participe
-                #ajouter paiement admin
-                Game.query.filter(and_(Game.message==int(keys[0]),Game.id_game==code_game,Game.paid==mise_game)).update({
-                                'statut': 'Perdu'
-                                })
-                db.session.commit()
-                
-                n=str(compt)+' est le numero gagnant (perdu)'
-                
-                salle=int(keys[0])+mise_game
-                print("vert")
-                # print(f,r,n)
-                socketio.emit('server_resultat', {'statut':n},room=str(salle)) 
-                
-            else:
-                payement_admin=mise_game*game_participe
-                Game.query.filter(and_(Game.message==int(keys[0]),Game.id_game==code_game,Game.paid==mise_game)).update({
-                                'statut': 'Perdu'
-                                })
-                db.session.commit()
-                
-                r=int(keys[0])+1
-                salle=int(keys[0])+mise_game
-                print("rouge")
-                # print("vous avez perdu le jeu",r,keys[0])
-                socketio.emit('server_resultat', {'statut':str(r)+' le numero gagnant (perdu)'}, room=str(salle))               
-    
-        
 @socketio.on("join", namespace='/profile')
 def on_join(data):
     
