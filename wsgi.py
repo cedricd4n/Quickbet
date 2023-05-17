@@ -114,7 +114,7 @@ def background_thread():
                                             db.session.commit()
                                         salle=compt+paid
                                         
-                                        socketio.emit('server_resultat_win', {'statut':'Gagné'},room=str(salle), namespace='/profile')
+                                        socketio.emit('server_resultat_win', {'statut':'Gagné'},room=str(salle))
                                     else:
                                         Game.query.filter(and_(Game.message==i,Game.id_game==code_game,Game.paid==paid)).update({
                                                     'statut': 'Perdu'
@@ -122,7 +122,7 @@ def background_thread():
                                         db.session.commit()
                                         
                                         salle_lost=int(i)+paid
-                                        socketio.emit('server_resultat_lose', {'statut':str(compt)+' le numero gagnant (perdu)'}, room=str(salle_lost), namespace='/profile')
+                                        socketio.emit('server_resultat_lose', {'statut':str(compt)+' le numero gagnant (perdu)'}, room=str(salle_lost))
                                         print("vous avez perdu le jeu",i,str(compt))
                             elif z==1 and len(val) != 0:
                                 compt=random.randint(1,8)
@@ -140,7 +140,7 @@ def background_thread():
                                     salle=int(keys[0])+paid
                                     print("vert")
                                     # print(f,r,n)
-                                    socketio.emit('server_resultat_lose', {'statut':n},room=str(salle), namespace='/profile') 
+                                    socketio.emit('server_resultat_lose', {'statut':n},room=str(salle)) 
                                     
                                 else:
                                     payement_admin=paid*game_participe
@@ -153,14 +153,14 @@ def background_thread():
                                     salle=int(keys[0])+paid
                                     print("rouge")
                                     # print("vous avez perdu le jeu",r,keys[0])
-                                    socketio.emit('server_resultat_lose', {'statut':str(r)+' le numero gagnant (perdu)'}, room=str(salle), namespace='/profile')               
+                                    socketio.emit('server_resultat_lose', {'statut':str(r)+' le numero gagnant (perdu)'}, room=str(salle))               
                             keys=[]
                             val=[]  
                             dictionary={}
                             compt=0
                             salle=[]  
         socketio.emit('responses',
-        {'data': 'Server generated event', 'count': '','times':__time__,'status':'jouer','serie':__var__},namespace='/profile')
+        {'data': 'Server generated event', 'count': '','times':__time__,'status':'jouer','serie':__var__})
         socketio.sleep(10)
         var= random.sample(range(1,9),8)
         code_game=Password()
@@ -174,7 +174,7 @@ def background_thread():
                 min_sec_format = '{:02d}'.format((mins*60)+secs)
                 timeformat = '{:02d}s'.format((mins*60)+secs)
             socketio.emit('responses_server',
-            {'data': 'Server generated event', 'count':int(min_sec_format),'times':timeformat,'status':'jouer','serie':var,'idgame':code_game},namespace='/profile')
+            {'data': 'Server generated event', 'count':int(min_sec_format),'times':timeformat,'status':'jouer','serie':var,'idgame':code_game})
             socketio.sleep(1)
             
             count -= 1 
@@ -190,7 +190,7 @@ def background_thread():
 
     
 @login_required 
-@socketio.on('connect', namespace='/profile')
+@socketio.on('connect')
 def test_connect():
     
     from app.models import TmpGame
@@ -222,7 +222,7 @@ def test_connect():
                 emit("room_message", f"Welcome to, {current_user.name}", room=id_room)    
             else:
                 print("salut")
-                socketio.emit('responses_server_third',{'data':display_hist.tmp_mise,'betnumber':display_hist.tmp_message,'idgame':display_hist.tmp_id_game},room=id_room,namespace='/profile')
+                socketio.emit('responses_server_third',{'data':display_hist.tmp_mise,'betnumber':display_hist.tmp_message,'idgame':display_hist.tmp_id_game},room=id_room)
                 tmp_participe=TmpGame.query.filter(TmpGame.tmp_mise==display_hist.tmp_mise).count()
                 
                 if tmp_participe%2 ==0:
@@ -233,27 +233,27 @@ def test_connect():
                 if tmp_participe==1:
                     print("ahi")
                     possible_gain=display_hist.tmp_mise+((50*display_hist.tmp_mise)/100)
-                    socketio.emit('possible_gain', {'mise':display_hist.tmp_mise,'user_count':possible_gain,'player':1},room=id_room,namespace='/profile')
+                    socketio.emit('possible_gain', {'mise':display_hist.tmp_mise,'user_count':possible_gain,'player':1},room=id_room)
                 else:
                     user_count=round(tmp_participe/2)
                     for i in range(1,user_count+1):
 
                         possible_gain=round((display_hist.tmp_mise*tmp_participe)/(i+1))
-                        socketio.emit('possible_gain', {'mise':display_hist.tmp_mise,'user_count':possible_gain,'player':nbr_gain,'players':tmp_participe},room=id_room,namespace='/profile')
+                        socketio.emit('possible_gain', {'mise':display_hist.tmp_mise,'user_count':possible_gain,'player':nbr_gain,'players':tmp_participe},room=id_room)
             
         
 
-@socketio.on('event_pay', namespace='/profile')
+@socketio.on('event_pay')
 def generatedset(data):
     betnumber=data['data']
     idgame=data['tag_game']
     room_user=current_user.id
     mises=[100,200,300,400,500,600,700,800,900,1000]
       
-    socketio.emit('responses_server_first',{'data':mises,'betnumber':betnumber,'idgame':idgame},room=room_user,namespace='/profile')
+    socketio.emit('responses_server_first',{'data':mises,'betnumber':betnumber,'idgame':idgame},room=room_user)
     
   
-@socketio.on('event_mise', namespace='/profile')
+@socketio.on('event_mise')
 def generatedpossiblegain(res):
     from app.models import TmpGame
     
@@ -290,15 +290,15 @@ def generatedpossiblegain(res):
         if tmp_participe==1:
             print("good")
             possible_gain=mise+((50*mise)/100)
-            socketio.emit('possible_gain', {'mise':mise,'user_count':possible_gain,'player':1},room=str(mise),namespace='/profile')
+            socketio.emit('possible_gain', {'mise':mise,'user_count':possible_gain,'player':1},room=str(mise))
         else:
             user_count=round(tmp_participe/2)
             for i in range(1,user_count+1):
 
                 possible_gain=round((mise*tmp_participe)/(i+1))
-                socketio.emit('possible_gain', {'mise':mise,'user_count':possible_gain,'player':nbr_gain,'players':tmp_participe},room=str(mise),namespace='/profile')
+                socketio.emit('possible_gain', {'mise':mise,'user_count':possible_gain,'player':nbr_gain,'players':tmp_participe},room=str(mise))
     
-        socketio.emit('responses_server_second',{'data':mise,'betnumber':number,'idgame':id_game},room=room_user,namespace='/profile')
+        socketio.emit('responses_server_second',{'data':mise,'betnumber':number,'idgame':id_game},room=room_user)
         
         
     # else:
@@ -344,7 +344,7 @@ def generatedpossiblegain(res):
 
 
    
-@socketio.on('event_save', namespace='/profile')
+@socketio.on('event_save')
 def generatedpossiblegain(res):
     
     from app.models import  Game
@@ -369,8 +369,8 @@ def generatedpossiblegain(res):
     })
     db.session.commit()
     data_solde=Compte_Quickcash.query.filter_by(user_id=current_user.id).first()
-    socketio.emit('responses_server_third',{'data':mise,'betnumber':number,'idgame':id_game},room=str(roomessage),namespace='/profile')
-    socketio.emit('server_response_solde',{'data':data_solde.solde},room=str(roomessage),namespace='/profile')
+    socketio.emit('responses_server_third',{'data':mise,'betnumber':number,'idgame':id_game},room=str(roomessage))
+    socketio.emit('server_response_solde',{'data':data_solde.solde},room=str(roomessage))
     game=Game.query.order_by(Game.id.desc()).filter_by(user_id=current_user.id).first()
     numero_jeu=game.id_game
     date_jeu=game.registered_on
@@ -379,9 +379,9 @@ def generatedpossiblegain(res):
     mise_jeu=game.paid
     numero_parier=game.message
     statut=game.statut    
-    socketio.emit('detail_jeu',{'numero_jeu': numero_jeu,'formatted_data':formatted_data,'mise_jeu':mise_jeu,'numero_parier':numero_parier,'statut':statut},room=str(roomessage),namespace='/profile') 
+    socketio.emit('detail_jeu',{'numero_jeu': numero_jeu,'formatted_data':formatted_data,'mise_jeu':mise_jeu,'numero_parier':numero_parier,'statut':statut},room=str(roomessage)) 
        
-@socketio.on('delete_row', namespace='/profile')
+@socketio.on('delete_row')
 def delete_row(load):
     
     from app.models import TmpGame
@@ -393,7 +393,7 @@ def delete_row(load):
     
     db.session.commit()
 
-@socketio.on("join", namespace='/profile')
+@socketio.on("join")
 def on_join(data):
     
     # session_id=request.sid
@@ -405,10 +405,10 @@ def on_join(data):
     join_room(room_second)
     join_room(room72)
     
-    socketio.emit("room_message", f"Welcome to {room}", room=[room], namespace='/profile')  
+    socketio.emit("room_message", f"Welcome to {room}", room=[room])  
     
    
-@socketio.on('leave', namespace='/profile')
+@socketio.on('leave')
 def on_leave(msg):
     
     
@@ -419,7 +419,7 @@ def on_leave(msg):
    
     leave_room(room)
     leave_room(room_second)
-    socketio.emit("room_message1", f"bye to {room}", namespace='/profile')
+    socketio.emit("room_message1", f"bye to {room}")
 
 
 

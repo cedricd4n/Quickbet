@@ -378,7 +378,7 @@
         var temps_received = [];
         $(document).ready(function(){
                 $("#card-item").hide();
-                socket = io.connect('http://' + document.domain + ':' + location.port + '/profile');
+                socket = io();
                 $("#play").hide();
                 $("#wait").hide();
                 var gain_received = [];
